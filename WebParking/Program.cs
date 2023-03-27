@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebParking.Data.Data;
+using WebParking.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +23,65 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-// получение по умолчанию данных
-app.MapGet("/", (ParkingContext db) => db.Users.ToList());
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// получение данных
+app.MapGet("/parking/users", async (ParkingContext db) => await db.Users.ToListAsync());
+
+//получение данных по id
+app.MapGet("/parking/users/{id:int}", async (int id, ParkingContext db) =>
+{
+    // получаем пользователя по id
+    UserEntityModel? user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+    // если не найден, отправляем статусный код и сообщение об ошибке
+    if (user == null) return Results.NotFound(new { message = "Пользователь не найден" });
+
+    // если пользователь найден, отправляем его
+    return Results.Json(user);
+});
+
+//удаление 
+app.MapDelete("/parking/users/{id:int}", async (int id, ParkingContext db) =>
+{
+    // получаем пользователя по id
+    UserEntityModel? user = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+    // если не найден, отправляем статусный код и сообщение об ошибке
+    if (user == null) return Results.NotFound(new { message = "Пользователь не найден" });
+
+    // если пользователь найден, удаляем его
+    db.Users.Remove(user);
+    await db.SaveChangesAsync();
+    return Results.Json(user);
+});
+
+app.MapPost("/parking/users}", async (UserEntityModel user, ParkingContext db) =>
+{
+    //Добавляем пользователя
+    db.Users.Add(user);
+    await db.SaveChangesAsync();
+    return user;
+});
+
+app.MapPut("/parking/users/", async (UserEntityModel userData, ParkingContext db) =>
+{
+    // получаем пользователя по id
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Id == userData.Id);
+
+    // если не найден, отправляем статусный код и сообщение об ошибке
+    if (user == null) return Results.NotFound(new { message = "Пользователь не найден" });
+
+    // если пользователь найден, изменяем его данные и отправляем обратно клиенту
+    user.Email = userData.Email;
+    user.Password = userData.Password;
+    user.Name = userData.Name;
+    await db.SaveChangesAsync();
+    return Results.Json(user);
+});
 
 app.UseRouting();
 
