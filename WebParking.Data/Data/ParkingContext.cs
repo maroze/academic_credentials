@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Library.Common.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace WebParking.Data.Data
 {
     public class ParkingContext : DbContext
     {
-        public DbSet<UserEntityModel> Users { get; set; }
+        public DbSet<SignUpViewModel> Users { get; set; }
         public ParkingContext(DbContextOptions<ParkingContext> options) : base(options)
         {
             Database.EnsureCreated(); // создаем базу данных при первом обращении
@@ -18,17 +19,16 @@ namespace WebParking.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserEntityModel>().HasData(new UserEntityModel
+            modelBuilder.Entity<SignUpViewModel>().HasData(new SignUpViewModel
             {
-                Id = 1,
-                Name = "Arturo",
+                LastName = "Arturo",
                 Email = "arturo@gmail.com",
                 Password = "Arturo1972!"
             },
-                new UserEntityModel { Id = 2, Name = "Meredit", Email = "queen@gmail.com", Password = "Mer2005dit?" },
-                new UserEntityModel { Id = 3, Name = "Yan", Email = "yantoples98@gmail.com", Password = "gjsfjss4554," },
-                new UserEntityModel { Id = 4, Name = "Laura", Email = "cutelaura07@gmail.com", Password = "la;ura785" },
-                new UserEntityModel { Id = 5, Name = "Justin", Email = "justinbest@gmail.com", Password = "just100?!" }
+                new SignUpViewModel { LastName = "Meredit", Email = "queen@gmail.com", Password = "Mer2005dit?" },
+                new SignUpViewModel { LastName = "Yan", Email = "yantoples98@gmail.com", Password = "gjsfjss4554," },
+                new SignUpViewModel { LastName = "Laura", Email = "cutelaura07@gmail.com", Password = "la;ura785" },
+                new SignUpViewModel { LastName = "Justin", Email = "justinbest@gmail.com", Password = "just100?!" }
                 );
         }
     }

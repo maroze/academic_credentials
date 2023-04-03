@@ -24,9 +24,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
 app.UseHttpsRedirection();
+
+app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // получение данных
 app.MapGet("/parking/users", async (ParkingContext db) => await db.Users.ToListAsync());
@@ -62,10 +66,10 @@ app.MapDelete("/parking/users/{id:int}", async (int id, ParkingContext db) =>
 app.MapPost("/parking/users}", async (UserEntityModel user, ParkingContext db) =>
 {
     //ƒобавл€ем пользовател€
-    db.Users.Add(user);
+    await db.Users.AddAsync(user);
     await db.SaveChangesAsync();
     return user;
-});
+}); 
 
 app.MapPut("/parking/users/", async (UserEntityModel userData, ParkingContext db) =>
 {
@@ -85,7 +89,6 @@ app.MapPut("/parking/users/", async (UserEntityModel userData, ParkingContext db
 
 app.UseRouting();
 
-app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

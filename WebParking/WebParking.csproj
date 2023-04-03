@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebParking.Data\WebParking.Data.csproj" />
+    <ProjectReference Include="..\WebParking.Common\WebParking.Common.csproj" />
+    <ProjectReference Include="..\WebParking.Logic\WebParking.Logic.csproj" />
+    <ProjectReference Include="..\WebParking.Service\WebParking.Service.csproj" />
   </ItemGroup>
 
 </Project>

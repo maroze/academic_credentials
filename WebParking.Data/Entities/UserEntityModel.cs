@@ -11,17 +11,7 @@ namespace WebParking.Data.Entities
    [Table("Users")]
     public class UserEntityModel
     {
-        [Key]
-        //ID пользователя
-        public int Id { get; set; }
-
-        //Имя пользователя
-        public string Name { get; set; }
-
-        //Логин пользователя
-        public string Email { get; set; }
-
-        //Пароль пользователя
-        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
