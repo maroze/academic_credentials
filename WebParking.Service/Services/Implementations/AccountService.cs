@@ -1,4 +1,5 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,34 +14,24 @@ namespace WebParking.Service.Services.Implementations
     {
 
         private readonly IUserRepository _userRepository;
-        private readonly UserEntityModel _user;
-        public AccountService(IUserRepository userRepository, UserEntityModel user)
+        public AccountService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _user = user;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login (LoginViewModel model)
+        public async Task<UserModel> Authenticate(LoginViewModel user)
         {
-            var user = await _userRepository.Authenticate
+            return await _userRepository.Authenticate(user);
         }
 
-        public Task<UserModel> Authorization(LoginViewModel model)
+        public async void Register(RegisterViewModel user)
         {
-            throw new NotImplementedException();
-        }
-        public byte[] CreateHash(string password)
-        {
-            byte[] passwordHash = new HMACSHA512().ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            return passwordHash;
-        }
-        public async Task<UserModel> CreateUser(RegisterViewModel model)
-        {
-            var pass = await Fis
-            var result = await _userRepository.CreateUser(model);
-            return result;
+             _userRepository.Register(user);
         }
 
+        public async Task<bool> UserAlreadyExists(RegisterViewModel user)
+        {
+            return await _userRepository.UserAlreadyExists(user);
+        }
     }
 }

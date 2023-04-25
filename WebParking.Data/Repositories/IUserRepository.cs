@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Common.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,36 +11,24 @@ namespace WebParking.Data.Repositories
     public interface IUserRepository
     {
         /// <summary>
-        /// Информация о всех пользователях
+        /// Регистрация пользователя
         /// </summary>
-        /// <returns></returns>
-        IEnumerable<UserEntityModel> GetUsers();
+        /// <param name="user"></param>
+        void Register(RegisterViewModel user);
 
         /// <summary>
-        /// Информация о пользователе по id
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<UserEntityModel> GetUser(int userId);
-
-        /// <summary>
-        /// Создание пользователя
+        /// Проверка существует пользователь 
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<UserEntityModel> CreateUser(UserEntityModel user);
+        Task<bool> UserAlreadyExists(RegisterViewModel user);
 
         /// <summary>
-        /// Редактирование пользователя
+        /// Аутентификация пользователя
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<UserEntityModel> UpdateUser(UserEntityModel user);
-
-        /// <summary>
-        /// Удаление пользователя
-        /// </summary>
-        /// <param name="userId"></param>
-        Task<UserEntityModel> DeleteUser(int userId);
+        Task<UserEntityModel> Authenticate(LoginViewModel user);
+        
     }
 }

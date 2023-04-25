@@ -13,15 +13,13 @@ namespace WebParking.Data.Repositories.Implementations
 {
     public class UserRepository : BaseRepository<UserEntityModel>, IUserRepository
     {
-        private readonly ParkingContext context;
         public UserRepository(ParkingContext _userContext) : base(_userContext)
         {
-            context = _userContext;
         }
 
         public async Task<UserEntityModel> Authenticate(LoginViewModel user)
         {
-            return await context.Users.FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
         }
         public void Register(RegisterViewModel user)
         {
@@ -33,38 +31,12 @@ namespace WebParking.Data.Repositories.Implementations
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Password));
             }
             UserEntityModel userEntity = new UserEntityModel() { Password = passwordHash, PasswordKey = passwordKey };
-            context.Users.Add(userEntity);
+            Insert(userEntity);
         }
 
         public async Task<bool> UserAlreadyExists(RegisterViewModel user)
         {
-            return await context.Users.AnyAsync(x => x.Email == user.Email);
-        }
-
-        public async Task<UserEntityModel> CreateUser(UserEntityModel user)
-        {
-            Insert(user);
-            return await Task.FromResult(user);
-        }
-
-        public Task<UserEntityModel> DeleteUser(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserEntityModel> GetUser(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserEntityModel> GetUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserEntityModel> UpdateUser(UserEntityModel user)
-        {
-            throw new NotImplementedException();
+            return await GetQuery().AnyAsync(x => x.Email == user.Email);
         }
     }
 }

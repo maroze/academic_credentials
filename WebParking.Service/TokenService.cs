@@ -14,15 +14,15 @@ namespace WebParking.Service
 {
     public class TokenService
     {
-        private string mysecret;
-        private string myexpDate;
+        private static string mysecret;
+        private static string myexpDate;
         public void JwtService(IConfiguration config)
         {
             mysecret = config.GetSection("JwtConfig").GetSection("secret").Value;
             myexpDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
         }
 
-        public string GenerateSecurityToken(UserEntityModel user)
+        public static string GenerateSecurityToken(LoginViewModel user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);
@@ -30,8 +30,7 @@ namespace WebParking.Service
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role , user.Role.ToString())
+                    new Claim(ClaimTypes.Email, user.Email)
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
