@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebParking.Data.Data;
+using WebParking.Data;
 using WebParking.Service.Services;
 using WebParking.Service.Services.Implementations;
+using WebParking.Data.Repositories;
+using WebParking.Data.Repositories.Implementations;
 
 namespace WebParking
 {
@@ -22,8 +25,9 @@ namespace WebParking
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ParkingContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Employees.Data")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("WebParking.Data")));
 
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddTransient<IAccountService, AccountService>();
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfig")["secret"]);

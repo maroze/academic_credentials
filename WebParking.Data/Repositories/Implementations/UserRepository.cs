@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using WebParking.Common;
 using WebParking.Data.Data;
 using WebParking.Data.Entities;
 
@@ -19,18 +20,11 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<UserEntityModel> Authenticate(LoginViewModel user)
         {
-            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == PasswordEncryption.HashPassword(user.Password));
         }
         public void Register(RegisterViewModel user)
         {
-            byte[] passwordHash, passwordKey;
-
-            using (var hmac = new HMACSHA512())
-            {
-                passwordKey = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(user.Password));
-            }
-            UserEntityModel userEntity = new UserEntityModel() { Password = passwordHash, PasswordKey = passwordKey };
+            UserEntityModel userEntity = new UserEntityModel() { Password = PasswordEncryption.HashPassword(user.Password), Email = user.Email };
             Insert(userEntity);
         }
 

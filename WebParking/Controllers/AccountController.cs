@@ -33,10 +33,10 @@ namespace WebParking.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            //if (_accountService.UserAlreadyExists(model))
-            //    return BadRequest("User already exists, please try something else");
+            if (await _accountService.UserAlreadyExists(model))
+                return BadRequest("User already exists, please try something else");
 
             _accountService.Register(model);
             return StatusCode(201);

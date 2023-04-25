@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
+using WebParking.Common;
 using WebParking.Data.Entities;
 
 namespace WebParking.Service.Models
@@ -16,14 +17,7 @@ namespace WebParking.Service.Models
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public static byte[] CreateHash(string password)
-        {
-            byte[] passwordHash;
-
-            passwordHash = new HMACSHA512().ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            return passwordHash;
-        }
-
+        
         public static implicit operator UserEntityModel(UserModel model)
         {
 
@@ -37,7 +31,7 @@ namespace WebParking.Service.Models
             {
 
                 Email = model.Email,
-                Password = CreateHash(model.Password)
+                Password = PasswordEncryption.HashPassword(model.Password)
             };
         }
         public static implicit operator UserModel(LoginViewModel model)
