@@ -8,10 +8,19 @@ using System.Threading.Tasks;
 
 namespace WebParking.Data.Entities
 {
-   [Table("Users")]
+    public enum Role
+    {
+        Administrator,
+        Manager,
+        User
+    }
+    [Table("Users")]
     public class UserEntityModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public Guid Id { get; set; }
+        public string Email { get; set; }
+        public byte [] Password { get; set; }
+        public byte[] PasswordKey { get; set; }
+        public Role Role { get; set; }
     }
 }

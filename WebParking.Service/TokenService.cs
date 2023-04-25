@@ -1,11 +1,18 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Library.Common.ViewModels;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using WebParking.Data.Entities;
 
-namespace WebParking.Services
+namespace WebParking.Service
 {
-    public class JwtServices
+    public class TokenService
     {
         private string mysecret;
         private string myexpDate;
@@ -15,7 +22,7 @@ namespace WebParking.Services
             myexpDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
         }
 
-        public string GenerateSecurityToken(string email)
+        public string GenerateSecurityToken(UserEntityModel user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);
@@ -23,12 +30,13 @@ namespace WebParking.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email, email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role , user.Role.ToString())
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+            };  
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
@@ -37,3 +45,4 @@ namespace WebParking.Services
         }
     }
 }
+

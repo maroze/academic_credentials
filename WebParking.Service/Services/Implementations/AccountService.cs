@@ -1,44 +1,46 @@
 ﻿using Library.Common.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 using WebParking.Data.Entities;
 using WebParking.Data.Repositories;
-using WebParking.Services;
+using WebParking.Service.Models;
 
 namespace WebParking.Service.Services.Implementations
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<UserEntityModel> userManager;
-        private readonly SignInManager<UserEntityModel> signInManager;
-        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountService(SignInManager<UserEntityModel> signInManager, UserManager<UserEntityModel> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly IUserRepository _userRepository;
+        private readonly UserEntityModel _user;
+        public AccountService(IUserRepository userRepository, UserEntityModel user)
         {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            _userRepository = userRepository;
+            _user = user;
         }
 
-        public async Task<IdentityResult> SignUpAsync(SignUpViewModel model)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login (LoginViewModel model)
         {
-            UserEntityModel user = new UserEntityModel()
-            {
-                LastName = model.LastName,
-                FirstName = model.FirstName
-            };
-
-            return await userManager.CreateAsync(user, model.Password);
+            var user = await _userRepository.Authenticate
         }
 
-        public Task<SignInResult> SignInAsync(SignInViewModel model)
+        public Task<UserModel> Authorization(LoginViewModel model)
         {
-            if (model != null)
-            {
-                var result = signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-                return JwtService.GenerateSecurityToken(model);
-            }
-
+            throw new NotImplementedException();
         }
+        public byte[] CreateHash(string password)
+        {
+            byte[] passwordHash = new HMACSHA512().ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return passwordHash;
+        }
+        public async Task<UserModel> CreateUser(RegisterViewModel model)
+        {
+            var pass = await Fis
+            var result = await _userRepository.CreateUser(model);
+            return result;
+        }
+
     }
 }

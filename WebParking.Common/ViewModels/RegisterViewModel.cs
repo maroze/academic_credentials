@@ -8,25 +8,20 @@ namespace Library.Common.ViewModels
     /// <summary>
     /// Модель представления регистрации пользователя
     /// </summary>
-    public class SignUpViewModel
+    public class RegisterViewModel
     {
-        [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-
-        public string? Patronymic { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
-        [Compare("ConfirmPassword")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "Password and confirmation password not match.")]
         public string ConfirmPassword { get; set; }
 
     }

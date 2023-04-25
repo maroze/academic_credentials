@@ -1,29 +1,29 @@
-﻿using System;
+﻿using Library.Common.ViewModels;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
+using WebParking.Data.Entities;
 
 namespace WebParking.Service.Models
 {
     public class UserModel
     {
-        [Key]
-        //ID пользователя
-        public int Id { get; set; }
-
-        //Имя пользователя
-        public string Name { get; set; }
-
-        //Логин пользователя
         public string Email { get; set; }
-
-        //Пароль пользователя
         public string Password { get; set; }
-
+        public byte[] CreateHash(string password)
+        {
+            byte[] passwordHash = new HMACSHA512().ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return passwordHash;
+        }
         public static implicit operator UserModel(UserEntityModel model)
         {
+
             if (model == null)
             {
 
@@ -32,10 +32,9 @@ namespace WebParking.Service.Models
             }
             else return new UserModel
             {
-                Id = model.Id,
-                Name = model.Name,
+
                 Email = model.Email,
-                Password = model.Password
+                CreateHash(Password) = model.Password
             };
         }
 
@@ -49,14 +48,12 @@ namespace WebParking.Service.Models
             }
             else return new UserEntityModel
             {
-                Id = model.Id,
-                Name = model.Name,
-                Email = model.Email,
-                Password = model.Password
+                LastName = model.LastName,
+                FirstName = model.FirstName
             };
         }
 
-        public static implicit operator UserModel(UserViewModel model)
+        public static implicit operator UserModel(LoginViewModel model)
         {
             if (model == null)
             {
@@ -64,16 +61,13 @@ namespace WebParking.Service.Models
                 return null;
 
             }
-           else return new UserModel
+            else return new UserModel
             {
-                Id = model.Id,
-                Name = model.Name,
-                Email = model.Email,
-                Password = model.Password
+                Email = model.Email
             };
         }
 
-        public static implicit operator UserViewModel(UserModel model)
+        public static implicit operator LoginViewModel(UserModel model)
         {
             if (model == null)
             {
@@ -81,12 +75,40 @@ namespace WebParking.Service.Models
                 return null;
 
             }
-            else return new UserViewModel
+            else return new LoginViewModel
             {
-                Id = model.Id,
-                Name = model.Name,
+                Email = model.Email
+            };
+        }
+        public static implicit operator UserModel(RegisterViewModel model)
+        {
+            if (model == null)
+            {
+
+                return null;
+
+            }
+            else return new UserModel
+            {
                 Email = model.Email,
-                Password = model.Password
+                LastName = model.LastName,
+                FirstName = model.FirstName
+            };
+        }
+
+        public static implicit operator RegisterViewModel(UserModel model)
+        {
+            if (model == null)
+            {
+
+                return null;
+
+            }
+            else return new RegisterViewModel
+            {
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
         }
     }

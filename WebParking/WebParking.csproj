@@ -28,4 +28,9 @@
     <ProjectReference Include="..\WebParking.Service\WebParking.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

@@ -11,7 +11,7 @@ namespace WebParking.Data.Data
 {
     public class ParkingContext : DbContext
     {
-        public DbSet<SignUpViewModel> Users { get; set; }
+        public DbSet<UserEntityModel> Users { get; set; }
         public ParkingContext(DbContextOptions<ParkingContext> options) : base(options)
         {
             Database.EnsureCreated(); // создаем базу данных при первом обращении
@@ -19,17 +19,12 @@ namespace WebParking.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SignUpViewModel>().HasData(new SignUpViewModel
-            {
-                LastName = "Arturo",
-                Email = "arturo@gmail.com",
-                Password = "Arturo1972!"
-            },
-                new SignUpViewModel { LastName = "Meredit", Email = "queen@gmail.com", Password = "Mer2005dit?" },
-                new SignUpViewModel { LastName = "Yan", Email = "yantoples98@gmail.com", Password = "gjsfjss4554," },
-                new SignUpViewModel { LastName = "Laura", Email = "cutelaura07@gmail.com", Password = "la;ura785" },
-                new SignUpViewModel { LastName = "Justin", Email = "justinbest@gmail.com", Password = "just100?!" }
-                );
+            modelBuilder.Entity<UserEntityModel>().HasData(
+                new UserEntityModel { Id = Guid.NewGuid(), Email = "arturo@gmail.com", Password = "Arturo1972!", Role = Role.User },
+                new UserEntityModel { Id = Guid.NewGuid(), Email = "queen@gmail.com", Password = "Mer2005dit?", Role = Role.User },
+                new UserEntityModel { Id = Guid.NewGuid(), Email = "yantoples98@gmail.com", Password = "gjsfjss4554,", Role = Role.User },
+                new UserEntityModel { Id = Guid.NewGuid(), Email = "cutelaura07@gmail.com", Password = "la;ura785", Role = Role.Administrator },
+                new UserEntityModel { Id = Guid.NewGuid(), Email = "justinbest@gmail.com", Password = "just100?!", Role = Role.Manager });
         }
     }
 }

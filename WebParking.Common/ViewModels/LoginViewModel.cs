@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Library.Common.ViewModels
@@ -7,18 +8,15 @@ namespace Library.Common.ViewModels
     /// <summary>
     /// Модель авторизации пользователя
     /// </summary>
-    public class LogInViewModel
+    public class LoginViewModel
     {
+        [Required, EmailAddress]
+        public string Email { get; set; }
 
-         
-        // Логин
-        public string Login { get; set; }
-
-        // Пароль
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        // Запомнить меня?
-        public bool RememberMe { get; set; }
 
     }
 }

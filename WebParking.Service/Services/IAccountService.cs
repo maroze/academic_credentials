@@ -1,24 +1,32 @@
-﻿using System;
+﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebParking.Service.Models;
 
 namespace WebParking.Service.Services
 {
-    public interface IAuthService
+    public interface IAccountService
     {
         /// <summary>
-        /// Регистрация пользователя в БД
+        /// Создание нового пользователя (регистрация)
         /// </summary>
-        /// <returns></returns>
-        Task<AuthModel> Register(UserModel model);
+        /// <param name="model"> Модель нового пользователя </param>
+        /// <returns> Результат выполнения метода </returns>
+        Task<UserModel> CreateUser(RegisterViewModel model);
+
 
         /// <summary>
-        /// Авторизация пользователя в БД
+        /// Авторизация пользователя
         /// </summary>
-        /// <returns></returns>
-        Task<AuthModel> Login(UserModel model);
+        /// <param name="model"> Модель авторизации </param>
+        /// <returns> Результат авторизации </returns>
+        Task<UserModel> Authorization(LoginViewModel model);
+
+        
     }
 }
 
