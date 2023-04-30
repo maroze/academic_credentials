@@ -11,10 +11,12 @@ namespace WebParking.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ITokenService tokenService)
         {
             _accountService = accountService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -24,7 +26,7 @@ namespace WebParking.Controllers
             {
                 if (!ModelState.IsValid) return BadRequest("Invalid request data");
                 var logUser = _accountService.Authenticate(user);
-                return Ok(TokenService.GenerateSecurityToken(user));
+                return Ok(_tokenService.GenerateSecurityToken(user));
             }
             catch (Exception e)
             {

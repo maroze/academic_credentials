@@ -17,7 +17,7 @@ namespace WebParking.Service.Models
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        
+
         public static implicit operator UserEntityModel(UserModel model)
         {
 
@@ -30,8 +30,7 @@ namespace WebParking.Service.Models
             else return new UserEntityModel
             {
 
-                Email = model.Email,
-                Password = PasswordEncryption.HashPassword(model.Password)
+                Email = model.Email
             };
         }
         public static implicit operator UserModel(LoginViewModel model)

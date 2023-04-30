@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace WebParking.Common
 {
-    public class PasswordEncryption
+    public class PasswordEncryption:IPasswordEncryption
     {
-        public static string HashPassword(string password)
+        public  string HashPassword(string password)
         {
             // generate a 128-bit salt using a secure PRNG
             byte[] salt = new byte[128 / 8];

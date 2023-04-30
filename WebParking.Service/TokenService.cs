@@ -12,17 +12,17 @@ using WebParking.Data.Entities;
 
 namespace WebParking.Service
 {
-    public class TokenService
+    public class TokenService:ITokenService
     {
-        private static string mysecret;
-        private static string myexpDate;
+        private  string mysecret;
+        private  string myexpDate;
         public void JwtService(IConfiguration config)
         {
             mysecret = config.GetSection("JwtConfig").GetSection("secret").Value;
             myexpDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
         }
 
-        public static string GenerateSecurityToken(LoginViewModel user)
+        public string GenerateSecurityToken(LoginViewModel user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);

@@ -9,6 +9,8 @@ using WebParking.Service.Services;
 using WebParking.Service.Services.Implementations;
 using WebParking.Data.Repositories;
 using WebParking.Data.Repositories.Implementations;
+using WebParking.Common;
+using WebParking.Service;
 
 namespace WebParking
 {
@@ -29,6 +31,9 @@ namespace WebParking
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ITokenService, TokenService>();
+            services.AddScoped<IPasswordEncryption, PasswordEncryption>();
+
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfig")["secret"]);
             services.AddAuthentication(x =>
