@@ -12,14 +12,15 @@ using WebParking.Data.Entities;
 
 namespace WebParking.Service
 {
-    public class TokenService:ITokenService
+    public class TokenService : ITokenService
     {
-        private  string mysecret;
-        private  string myexpDate;
-        public void JwtService(IConfiguration config)
+        private string mysecret;
+        private string myexpDate;
+        public TokenService(IConfiguration config)
         {
             mysecret = config.GetSection("JwtConfig").GetSection("secret").Value;
             myexpDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
+
         }
 
         public string GenerateSecurityToken(LoginViewModel user)
@@ -35,7 +36,7 @@ namespace WebParking.Service
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };  
+            };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 

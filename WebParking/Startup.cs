@@ -57,6 +57,7 @@ namespace WebParking
             //предоставляет полезные сведения об ошибках в среде разработки
 
             services.AddControllersWithViews();
+            services.AddSwaggerGen();
         }
         // Используйте этот метод для настройки запросов HTTP
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,6 +79,13 @@ namespace WebParking
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
+            });
 
             app.UseEndpoints(endpoints =>
             {

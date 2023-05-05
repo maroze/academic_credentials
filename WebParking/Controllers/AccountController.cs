@@ -1,6 +1,8 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebParking.Data.Entities;
 using WebParking.Service;
 using WebParking.Service.Services;
 
@@ -19,14 +21,21 @@ namespace WebParking.Controllers
             _tokenService = tokenService;
         }
 
+        
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginViewModel user)
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest("Invalid request data");
-                var logUser = _accountService.Authenticate(user);
-                return Ok(_tokenService.GenerateSecurityToken(user));
+                if (!ModelState.IsValid) 
+                    return BadRequest("Invalid request data");
+
+                var loguser= _accountService.Authenticate(user);
+
+                if (loguser.Result != null)
+                    return Ok(_tokenService.GenerateSecurityToken(user));
+                else
+                    return BadRequest("Wrong password or login");
             }
             catch (Exception e)
             {
