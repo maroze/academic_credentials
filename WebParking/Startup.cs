@@ -26,6 +26,10 @@ namespace WebParking
         // Используйте этот метод для добавления сервисов 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
             services.AddDbContext<ParkingContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("WebParking.Data")));
 
@@ -62,6 +66,7 @@ namespace WebParking
         // Используйте этот метод для настройки запросов HTTP
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("MyPolicy");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

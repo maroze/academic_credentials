@@ -17,10 +17,17 @@ namespace WebParking.Data.Entities
     [Table("Users")]
     public class UserEntityModel
     {
+        //Id пользователя
         [Key]
         public int UserId { get; set; }
+
+        //Email(логин) пользователя
         public string Email { get; set; }
+
+        //Пароль пользователя
         public string Password { get; set; }
+
+        //Роль (Админ, Менеджер, Пользователь)
         public Role Role { get; set; }
     }
 }
