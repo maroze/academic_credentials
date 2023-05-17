@@ -19,15 +19,19 @@ namespace WebParking.Data.Entities
     {
         //Id пользователя
         [Key]
+        [Column("user_id")]
         public int UserId { get; set; }
 
         //Email(логин) пользователя
+        [Column("username")]
         public string Email { get; set; }
 
         //Пароль пользователя
+        [Column("password")]
         public string Password { get; set; }
 
         //Роль (Админ, Менеджер, Пользователь)
+        [Column("role")]
         public Role Role { get; set; }
     }
 }

@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebParking.Common;
 
-namespace WebParking.Common
+namespace WebParking.Service.Services.Implementations
 {
-    public class PasswordEncryption:IPasswordEncryption
+    public class PasswordEncryption : IPasswordEncryption
     {
-        public  string HashPassword(string password)
+        public string HashPassword(string password)
         {
             // generate a 128-bit salt using a secure PRNG
             byte[] salt = new byte[128 / 8];

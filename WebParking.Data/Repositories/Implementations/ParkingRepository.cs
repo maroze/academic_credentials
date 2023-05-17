@@ -18,18 +18,10 @@ namespace WebParking.Data.Repositories.Implementations
 
         }
 
-        public Task<ParkingEntityModel> AddParking(ParkingViewModel park)
+        public async Task<ParkingEntityModel> AddParking(ParkingViewModel park)
         {
-            ParkingEntityModel parkem = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name };
-            byte[] imageData = null;
-            using (var binaryReader = new BinaryReader(park.Image.OpenReadStream()))
-            {
-                imageData = binaryReader.ReadBytes((int)park.Image.Length);
-            }
-            parkem.Image = imageData;
-
-            Insert(parkem);
-            return Task.FromResult(parkem);
+            Insert(park);
+            return park;
         }
 
         public async Task<ParkingEntityModel> GetParking(int parkId)
@@ -37,14 +29,7 @@ namespace WebParking.Data.Repositories.Implementations
             var result = await GetQuery()
                   .FirstOrDefaultAsync(p => p.ParkId == parkId);
 
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                throw new Exception("Парковка не найдена");
-            }
+            return result;
         }
     }
 }

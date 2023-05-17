@@ -8,20 +8,24 @@ using System.Threading.Tasks;
 
 namespace WebParking.Data.Entities
 {
-    [Table("Parks")]
+    [Table("Parkings")]
     public class ParkingEntityModel
     {
         //Id парковки
         [Key]
+        [Column("parking_id")]
         public int ParkId { get; set; }
 
         //Фото парковочных мест
+        [Column("image")]
         public byte[] Image { get; set; }
 
         //Название парковки
+        [Column("name")]
         public string? Name { get; set; }
 
         //Адрес парковки
-        public string Adress { get; set; }
+        [Column("adress")]
+        public string? Adress { get; set; }
     }
 }

@@ -9,8 +9,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebParking.Data.Entities;
+using WebParking.Data.Repositories;
 
-namespace WebParking.Service
+namespace WebParking.Service.Services.Implementations
 {
     public class TokenService : ITokenService
     {
@@ -23,7 +24,7 @@ namespace WebParking.Service
 
         }
 
-        public string GenerateSecurityToken(LoginViewModel user)
+        public string GenerateSecurityToken(string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);
@@ -31,7 +32,7 @@ namespace WebParking.Service
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, email)
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),

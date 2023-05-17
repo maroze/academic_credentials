@@ -14,12 +14,16 @@ namespace WebParking.Data.Data
 
         public ParkingContext(DbContextOptions<ParkingContext> options) : base(options)
         {
-            //Database.EnsureCreated(); // создаем базу данных при первом обращении
+            Database.EnsureCreated(); // создаем базу данных при первом обращении
         }
         public DbSet<UserEntityModel> Users { get; set; }
+        public DbSet<ParkingEntityModel> Parkings { get; set; }
+        public DbSet<LotEntityModel> Lots { get; set; }
+        public DbSet<UserLotEntityModel> UserLots { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserEntityModel>();
+            modelBuilder.Entity<UserEntityModel>().Property(u => u.Role).HasDefaultValue(2); 
         }
     }
 }

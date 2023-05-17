@@ -1,9 +1,11 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebParking.Common.ViewModels;
 using WebParking.Data.Entities;
 
 namespace WebParking.Data.Repositories
@@ -30,5 +32,20 @@ namespace WebParking.Data.Repositories
         /// <returns></returns>
         Task<UserEntityModel> Authenticate(LoginViewModel user);
         
+        /// <summary>
+        /// Восстановление пароля
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> ResetPassword(ResetPasswordViewModel model);
+
+
     }
 }

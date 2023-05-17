@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using WebParking.Common;
+using WebParking.Common.ViewModels;
 using WebParking.Data.Entities;
 
 namespace WebParking.Service.Models
@@ -30,7 +31,8 @@ namespace WebParking.Service.Models
             else return new UserEntityModel
             {
 
-                Email = model.Email
+                Email = model.Email,
+                Password = model.Password
             };
         }
         public static implicit operator UserModel(LoginViewModel model)
@@ -49,6 +51,22 @@ namespace WebParking.Service.Models
                 Password = model.Password
             };
         }
+        public static implicit operator UserModel(ResetPasswordViewModel model)
+        {
+
+            if (model == null)
+            {
+
+                return null;
+
+            }
+            else return new UserModel
+            {
+
+                Email = model.Email,
+                Password = model.NewPasswod
+            };
+        }
         public static implicit operator UserModel(UserEntityModel model)
         {
 
@@ -61,7 +79,8 @@ namespace WebParking.Service.Models
             else return new UserModel
             {
 
-                Email = model.Email
+                Email = model.Email,
+                Password = model.Password
             };
         }
     }

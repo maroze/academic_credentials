@@ -10,7 +10,10 @@ using WebParking.Service.Services.Implementations;
 using WebParking.Data.Repositories;
 using WebParking.Data.Repositories.Implementations;
 using WebParking.Common;
-using WebParking.Service;
+using WebParking.Services.EmailServices;
+using Microsoft.AspNet.Identity;
+using WebParking.Data.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebParking
 {
@@ -30,12 +33,17 @@ namespace WebParking
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
+            services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddSingleton(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+
             services.AddDbContext<ParkingContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("WebParking.Data")));
 
+            //scoped мы получаем один и тот же инстанс в рамках одного HTTP-запроса, и разные для разных HTTP-запросов
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<ITokenService, TokenService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordEncryption, PasswordEncryption>();
 
 

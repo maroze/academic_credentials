@@ -13,24 +13,24 @@ namespace WebParking.Data.Entities
     {
         //Id парковочного места
         [Key]
+        [Column("lot_id")]
         public int LotId { get; set; }
 
         //Название парк. места
+        [Column("name")]
         public string Name { get; set; }
 
         //Состояние парк. места доступно/недоступно для бронирования
+        [Column("is_bloked")]
         public bool IsBlocked { get; set; }
 
         //Состояние парк. места забронировано/свободно
+        [Column("is_booked")]
         public bool IsBooked { get; set; }
 
         //Внешний ключ парковки
+        [Column("id_parkings")]
         public int IdParks { get; set; }
-        public ParkingEntityModel Parks { get; set; }
-
-        //Внешний ключ пользователя
-        public int IdUsers { get; set; }
-        public UserEntityModel Users { get; set; }
-        
+        public ParkingEntityModel Parks { get; set; }        
     }
 }
