@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebParking.Common.ViewModels;
@@ -18,7 +19,7 @@ namespace WebParking.Service.Services
         /// Регистрация пользователя
         /// </summary>
         /// <param name="user"></param>
-        void Register(RegisterViewModel user);
+        Task Register(RegisterViewModel user);
 
         /// <summary>
         /// Проверка существует пользователь 
@@ -47,6 +48,14 @@ namespace WebParking.Service.Services
         /// <param name="pass"></param>
         /// <returns></returns>
         //Task<UserModel> ResetPassword(ResetPasswordViewModel pass);
+
+        /// <summary>
+        /// Получение пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> GetUserById(int id);
+       
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,12 +9,6 @@ using System.Threading.Tasks;
 
 namespace WebParking.Data.Entities
 {
-    public enum Role
-    {
-        Administrator,
-        Manager,
-        User
-    }
     [Table("Users")]
     public class UserEntityModel
     {
@@ -32,6 +27,6 @@ namespace WebParking.Data.Entities
 
         //Роль (Админ, Менеджер, Пользователь)
         [Column("role")]
-        public Role Role { get; set; }
+        public IdentityRole Role { get; set; }
     }
 }

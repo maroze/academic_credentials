@@ -1,4 +1,5 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,13 @@ namespace WebParking.Data.Repositories.Implementations
     public class UserRepository : BaseRepository<UserEntityModel>, IUserRepository
 
     {
-        public UserRepository(ParkingContext _userContext ) : base(_userContext)
+        public UserRepository(ParkingContext _userContext) : base(_userContext)
         {
         }
 
-        public async Task<UserEntityModel> Authenticate(LoginViewModel user)
+        public Task<UserEntityModel> Authenticate(LoginViewModel user)
         {
-            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password ==user.Password);
+            return GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
         }
 
         public async Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model)
@@ -35,10 +36,17 @@ namespace WebParking.Data.Repositories.Implementations
             return result;
         }
 
-        public void Register(RegisterViewModel user)
+        public async Task<UserEntityModel> GetById(int id)
         {
-            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email };
-            Insert(userEntity);
+            var result = await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(e => e.UserId == id);
+
+            return result;
+        }
+
+        public async Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role)
+        {
+            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email, Role = role };
+            return await InsertAsync(userEntity);
         }
 
         public async Task<UserEntityModel> ResetPassword(ResetPasswordViewModel model)

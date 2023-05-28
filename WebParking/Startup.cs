@@ -11,9 +11,10 @@ using WebParking.Data.Repositories;
 using WebParking.Data.Repositories.Implementations;
 using WebParking.Common;
 using WebParking.Services.EmailServices;
-using Microsoft.AspNet.Identity;
 using WebParking.Data.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebParking
 {
@@ -39,12 +40,17 @@ namespace WebParking
 
             services.AddDbContext<ParkingContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("WebParking.Data")));
+           
 
             //scoped мы получаем один и тот же инстанс в рамках одного HTTP-запроса, и разные для разных HTTP-запросов
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordEncryption, PasswordEncryption>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ParkingContext>();
+
 
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfig")["secret"]);

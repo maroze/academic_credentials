@@ -1,13 +1,18 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebParking.Common.ViewModels;
 using WebParking.Data.Entities;
+using WebParking.Service.Models;
 using WebParking.Service.Services;
 using WebParking.Service.Services.Implementations;
 using WebParking.Services.EmailServices;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebParking.Controllers
 {
@@ -27,18 +32,43 @@ namespace WebParking.Controllers
         }
 
         /// <summary>
-        /// Выход пользователя из аккаунта
+        /// Информация о пользователе 
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet("getuser")]
+        public async Task<IActionResult> GetUserAsync([FromBody] int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
 
+                var loguser = await _accountService.GetUserById(id);
+
+                if (loguser != null)
+                {
+                    return Ok(loguser);
+                }
+
+                else
+                    return BadRequest("User doesn't exist");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
 
         /// <summary>
         /// Авторизация пользователя в аккаунте
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("login")]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("login")]
         public IActionResult Login([FromBody] LoginViewModel user)
         {
             try
@@ -49,7 +79,10 @@ namespace WebParking.Controllers
                 var loguser = _accountService.Authenticate(user);
 
                 if (loguser.Result != null)
-                    return Ok(_tokenService.GenerateSecurityToken(user.Email));
+                {
+                    return Ok(_tokenService.GenerateSecurityToken(user));
+                }
+
                 else
                     return BadRequest("Wrong password or login");
             }
@@ -64,7 +97,7 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-         
+
         [HttpPost("forgot-pass")]
         public IActionResult Reset([FromBody] ForgotPasswordViewModel user)
         {
@@ -75,8 +108,9 @@ namespace WebParking.Controllers
 
                 if (_accountService.ForgotPassword(user).Result != null)
                 {
-                    var token = _tokenService.GenerateSecurityToken(user.Email); /// Нужно генерировать не токен JWT,а просто токен, позже исправлю 
-                    
+
+                    var token = "Здесь должен быть токен";
+
                     var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
                     var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
 
@@ -91,7 +125,7 @@ namespace WebParking.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        
         /// <summary>
         /// Регистрация пользователя
         /// </summary>
@@ -100,16 +134,31 @@ namespace WebParking.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
+            
             if (await _accountService.UserAlreadyExists(model))
                 return BadRequest("User already exists, please try something else");
 
             if (!ModelState.IsValid)
                 return BadRequest("Invalid request data");
-            
 
-            _accountService.Register(model);
+
+            await _accountService.Register(model);
 
             return StatusCode(201);
+        }
+
+        /// <summary>
+        /// Выход пользователя из аккаунта
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return Redirect("/");
         }
     }
 }

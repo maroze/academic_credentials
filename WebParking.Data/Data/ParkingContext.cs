@@ -23,7 +23,7 @@ namespace WebParking.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserEntityModel>().Property(u => u.Role).HasDefaultValue(2); 
+            
         }
     }
 }

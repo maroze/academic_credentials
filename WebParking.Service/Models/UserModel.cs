@@ -1,5 +1,6 @@
 ﻿using Library.Common.ViewModels;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace WebParking.Service.Models
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public IdentityRole? Role { get; set; }
 
         public static implicit operator UserEntityModel(UserModel model)
         {
@@ -32,7 +34,9 @@ namespace WebParking.Service.Models
             {
 
                 Email = model.Email,
-                Password = model.Password
+                Password = model.Password,
+                Role = model.Role
+                
             };
         }
         public static implicit operator UserModel(LoginViewModel model)
@@ -49,6 +53,21 @@ namespace WebParking.Service.Models
 
                 Email = model.Email,
                 Password = model.Password
+            };
+        }
+        public static implicit operator UserModel(ForgotPasswordViewModel model)
+        {
+
+            if (model == null)
+            {
+
+                return null;
+
+            }
+            else return new UserModel
+            {
+
+                Email = model.Email
             };
         }
         public static implicit operator UserModel(ResetPasswordViewModel model)
@@ -80,7 +99,9 @@ namespace WebParking.Service.Models
             {
 
                 Email = model.Email,
-                Password = model.Password
+                Password = model.Password,
+                Role = model.Role
+                
             };
         }
     }

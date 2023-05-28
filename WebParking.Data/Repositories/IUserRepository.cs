@@ -1,4 +1,5 @@
 ﻿using Library.Common.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace WebParking.Data.Repositories
         /// Регистрация пользователя
         /// </summary>
         /// <param name="user"></param>
-        void Register(RegisterViewModel user);
+        Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role);
 
         /// <summary>
         /// Проверка существует пользователь 
@@ -33,18 +34,25 @@ namespace WebParking.Data.Repositories
         Task<UserEntityModel> Authenticate(LoginViewModel user);
         
         /// <summary>
-        /// Восстановление пароля
+        /// Забыли пароль
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model);
 
         /// <summary>
-        /// 
+        /// Восстановление пароля
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         Task<UserEntityModel> ResetPassword(ResetPasswordViewModel model);
+
+        /// <summary>
+        /// Получение пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> GetById(int id);
 
 
     }

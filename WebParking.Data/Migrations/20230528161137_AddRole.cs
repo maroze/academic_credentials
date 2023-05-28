@@ -6,30 +6,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebParking.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateFullDB : Migration
+    public partial class AddRole : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Role",
-                table: "Users",
-                newName: "role");
-
-            migrationBuilder.RenameColumn(
-                name: "Password",
-                table: "Users",
-                newName: "password");
-
-            migrationBuilder.RenameColumn(
-                name: "Email",
-                table: "Users",
-                newName: "username");
-
-            migrationBuilder.RenameColumn(
-                name: "UserId",
-                table: "Users",
-                newName: "user_id");
+            migrationBuilder.CreateTable(
+                name: "IdentityRole",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    NormalizedName = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityRole", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Parkings",
@@ -44,6 +38,26 @@ namespace WebParking.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parkings", x => x.parking_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    user_id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    username = table.Column<string>(type: "text", nullable: false),
+                    password = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.user_id);
+                    table.ForeignKey(
+                        name: "FK_Users_IdentityRole_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "IdentityRole",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +126,11 @@ namespace WebParking.Data.Migrations
                 name: "IX_UserLots_UsersUserId",
                 table: "UserLots",
                 column: "UsersUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -124,27 +143,13 @@ namespace WebParking.Data.Migrations
                 name: "Lots");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Parkings");
 
-            migrationBuilder.RenameColumn(
-                name: "role",
-                table: "Users",
-                newName: "Role");
-
-            migrationBuilder.RenameColumn(
-                name: "password",
-                table: "Users",
-                newName: "Password");
-
-            migrationBuilder.RenameColumn(
-                name: "username",
-                table: "Users",
-                newName: "Email");
-
-            migrationBuilder.RenameColumn(
-                name: "user_id",
-                table: "Users",
-                newName: "UserId");
+            migrationBuilder.DropTable(
+                name: "IdentityRole");
         }
     }
 }
