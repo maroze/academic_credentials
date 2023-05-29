@@ -23,13 +23,12 @@ namespace WebParking.Service.Services.Implementations
             _parkRepository = parkRepository;
         }
 
-        public async Task<LotModel> AddLot(LotViewModel lot, int idpark)
+        public async Task<LotModel> AddLot(LotModel lot)
         {
             if (lot == null)
                 throw new Exception("Парк место не указано");
             
                 var result = await _lotRepository.AddLot(lot);
-                result.IdParks = idpark;
                 return result;
         }
 

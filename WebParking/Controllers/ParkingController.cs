@@ -30,7 +30,7 @@ namespace WebParking.Controllers
         /// <param name="park"></param>
         /// <returns></returns>
         [HttpGet("getparkslot")]
-        public IActionResult GetLots([FromForm] LotViewModel lot)
+        public IActionResult GetLots([FromBody] LotViewModel lot)
         {
             try
             {
@@ -51,13 +51,13 @@ namespace WebParking.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost("booklot")]
-        public IActionResult BookLot([FromForm] int lot)
+        public async Task<IActionResult> BookLotAsync([FromBody] int lot)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-                var result = _lotService.BookLot(lot);
+                var result = await _lotService.BookLot(lot);
                 if (result == null)
                     return BadRequest("Lot unavailable for book");
                 return Ok();
@@ -74,13 +74,13 @@ namespace WebParking.Controllers
         /// <param name="park"></param>
         /// <returns></returns>
         [HttpGet("getlot")]
-        public IActionResult GetLot([FromForm] int lot)
+        public async Task<IActionResult> GetLotAsync([FromBody] int lot)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-                var result = _lotService.GetLot(lot);
+                var result = await _lotService.GetLot(lot);
                 if (result == null)
                     return BadRequest("Lot doesn't exists");
                 return Ok(result);
@@ -90,33 +90,30 @@ namespace WebParking.Controllers
                 return BadRequest(e.Message);
             }
         }
-        ///// <summary>
-        ///// Создание парк места
-        ///// </summary>
-        ///// <param name="park">парковка</param>
-        ///// <returns></returns>
-        //[HttpPost("create_lot")]
-        //public async Task<IActionResult> CreateLotAsync([FromForm] LotViewModel lot, int idpark)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //            return BadRequest("Invalid request data");
-        //        var park = await _parkService.GetParking(idpark);
-        //        if (park == null)
-        //            return BadRequest("Парковки с таким id не существует");
-        //        else
-        //        {
-        //            var result = await _lotService.AddLot(lot, idpark);
-        //            return Ok();
-        //        }
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+        /// <summary>
+        /// Создание парк места
+        /// </summary>
+        /// <param name="park">парковка</param>
+        /// <returns></returns>
+        [HttpPost("create_lot")]
+        public async Task<IActionResult> CreateLotAsync([FromBody] LotViewModel lot)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+                var result = await _lotService.AddLot(lot);
+                if (result == null)
+                {
+                    return BadRequest("doesn't create");
+                }
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         /// <summary>
         /// Создание картинки, адреса и названия парковки
@@ -124,14 +121,14 @@ namespace WebParking.Controllers
         /// <param name="park">парковка</param>
         /// <returns></returns>
         [HttpPost("create_imagepark")]
-        public IActionResult CreateParkingImg([FromForm] ParkingViewModel park)
+        public async Task<IActionResult> CreateParkingImgAsync([FromForm] ParkingViewModel park)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
 
-                var result = _parkService.AddParking(park);
+                var result = await _parkService.AddParking(park);
                 if (result == null)
                 {
                     return BadRequest("Parking doesn't create");
@@ -151,7 +148,7 @@ namespace WebParking.Controllers
         /// <param name="parkId">парковка</param>
         /// <returns></returns>
         [HttpGet("getimage")]
-        public async Task<IActionResult> GetParkingImgAsync([FromForm] int parkId)
+        public async Task<IActionResult> GetParkingImgAsync([FromBody] int parkId)
         {
             try
             {

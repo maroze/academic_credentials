@@ -23,7 +23,29 @@ namespace WebParking.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+       //     modelBuilder.Entity<ParkingEntityModel>()
+       // .ToTable("Parkings");
+       //     modelBuilder.Entity<ParkingEntityModel>()
+       //.HasData(
+       //         new ParkingEntityModel
+       //         {
+       //             ParkId = 1,
+       //             Name = "name1",
+       //             Adress = "adress",
+       //             Image = ""
+       //         });
+       //     modelBuilder.Entity<LotEntityModel>()
+       //   .ToTable("Lots");
+       //     modelBuilder.Entity<LotEntityModel>()
+       //.HasData(
+       //         new LotEntityModel
+       //         {
+       //             LotId = 1,
+       //             Name = "name1",
+       //             IsBlocked = false,
+       //             IsBooked = false,
+       //             IdParks = Parkings.Single(s => s.ParkId == 1).ParkId
+       //         });
         }
     }
 }

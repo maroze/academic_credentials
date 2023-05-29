@@ -18,6 +18,7 @@ namespace WebParking.Service.Models
         public bool IsBlocked { get; set; }
         //Состояние парк. места забронировано/свободно
         public bool IsBooked { get; set; }
+        public int IdParks { get; set; }
         public static implicit operator LotEntityModel(LotModel model)
         {
 
@@ -32,7 +33,8 @@ namespace WebParking.Service.Models
                 LotId = model.LotId,
                 Name = model.Name,
                 IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked
+                IsBooked = model.IsBooked,
+                IdParks =model.IdParks
             };
         }
         public static implicit operator LotModel(LotEntityModel model)
@@ -49,7 +51,8 @@ namespace WebParking.Service.Models
                 LotId = model.LotId,
                 Name = model.Name,
                 IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked
+                IsBooked = model.IsBooked,
+                IdParks = model.IdParks
             };
         }
         public static implicit operator LotViewModel(LotModel model)

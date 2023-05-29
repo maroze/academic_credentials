@@ -36,6 +36,6 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="lot"></param>
         /// <returns></returns>
-        Task<LotModel> AddLot(LotViewModel lot, int idpark);
+        Task<LotModel> AddLot(LotModel lot);
     }
 }

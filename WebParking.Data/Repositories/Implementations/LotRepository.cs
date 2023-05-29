@@ -17,11 +17,10 @@ namespace WebParking.Data.Repositories.Implementations
 
         }
 
-        public async Task<LotEntityModel> AddLot(LotViewModel lot)
+        public async Task<LotEntityModel> AddLot(LotEntityModel lot)
         {
-            LotEntityModel model = new LotEntityModel() { LotId = lot.LotId, Name = lot.Name, IsBlocked = lot.IsBlocked, IsBooked = lot.IsBooked };
-            Insert(model);
-            return model;
+            Insert(lot);
+            return lot;
         }
         
         public async Task<LotEntityModel> BookLot(int lotId)
