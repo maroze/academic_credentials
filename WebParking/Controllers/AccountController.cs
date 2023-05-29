@@ -12,7 +12,7 @@ using WebParking.Service.Models;
 using WebParking.Service.Services;
 using WebParking.Service.Services.Implementations;
 using WebParking.Services.EmailServices;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 
 namespace WebParking.Controllers
 {
@@ -23,6 +23,7 @@ namespace WebParking.Controllers
         private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
         private readonly IEmailSender _emailSender;
+       
 
         public AccountController(IAccountService accountService, ITokenService tokenService, IEmailSender emailSender)
         {
@@ -99,7 +100,7 @@ namespace WebParking.Controllers
         /// <returns></returns>
 
         [HttpPost("forgot-pass")]
-        public IActionResult Reset([FromBody] ForgotPasswordViewModel user)
+        public IActionResult Forgot([FromBody] ForgotPasswordViewModel user)
         {
             try
             {
@@ -109,7 +110,7 @@ namespace WebParking.Controllers
                 if (_accountService.ForgotPassword(user).Result != null)
                 {
 
-                    var token = "Здесь должен быть токен";
+                    var token = _tokenService.GenerateSecurityToken(user);
 
                     var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
                     var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
@@ -160,6 +161,30 @@ namespace WebParking.Controllers
 
             return Redirect("/");
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPassword)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+
+                var user = await _accountService.ResetPassword(resetPassword);
+            if (user!=null )
+            {
+                    return Ok();
+            }
+            else
+                    return BadRequest("Password doesn't change");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
     }
 }
 

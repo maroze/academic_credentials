@@ -47,6 +47,10 @@ namespace WebParking
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordEncryption, PasswordEncryption>();
+            services.AddScoped<IParkingRepository, ParkingRepository>();
+            services.AddScoped<IParkingService, ParkingService>();
+            services.AddScoped<ILotRepository, LotRepository>();
+            services.AddScoped<ILotService,LotService>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ParkingContext>();

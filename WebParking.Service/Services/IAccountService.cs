@@ -47,7 +47,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="pass"></param>
         /// <returns></returns>
-        //Task<UserModel> ResetPassword(ResetPasswordViewModel pass);
+        Task<UserModel> ResetPassword(ResetPasswordViewModel pass);
 
         /// <summary>
         /// Получение пользователя по id

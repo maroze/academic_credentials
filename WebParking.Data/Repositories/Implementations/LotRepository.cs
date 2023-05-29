@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebParking.Common.ViewModels;
 using WebParking.Data.Data;
 using WebParking.Data.Entities;
 
@@ -16,27 +17,25 @@ namespace WebParking.Data.Repositories.Implementations
 
         }
 
-        public async Task<LotEntityModel> AddLot(LotEntityModel lot)
+        public async Task<LotEntityModel> AddLot(LotViewModel lot)
         {
-            Insert(lot);
-            return lot;
+            LotEntityModel model = new LotEntityModel() { LotId = lot.LotId, Name = lot.Name, IsBlocked = lot.IsBlocked, IsBooked = lot.IsBooked };
+            Insert(model);
+            return model;
         }
-
+        
         public async Task<LotEntityModel> BookLot(int lotId)
         {
             var result = await GetQuery().Include(p => p.Parks)
                 .FirstOrDefaultAsync(l => l.LotId == lotId);
-            if(result == null)
+            if (!result.IsBooked)
             {
-                return null;
+                return result;
             }
-
-            if(!result.IsBooked)
-            {
+            else
                 return null;
-            }
 
-            return result;
+            
         }
 
         public async Task<LotEntityModel> GetLot(int lotId)

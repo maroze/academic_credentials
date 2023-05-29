@@ -23,6 +23,6 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        //Task<ParkingModel> AddParking(ParkingViewModel park);
+        Task<ParkingModel> AddParking(ParkingViewModel park);
     }
 }

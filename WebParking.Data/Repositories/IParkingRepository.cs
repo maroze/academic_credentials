@@ -22,7 +22,7 @@ namespace WebParking.Data.Repositories
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        Task<ParkingEntityModel> AddParking(ParkingViewModel park);
+        Task<ParkingEntityModel> AddParking(ParkingEntityModel park);
 
     }
 }

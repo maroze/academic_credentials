@@ -17,12 +17,10 @@ namespace WebParking.Common.ViewModels
         [Required]
         public IFormFile Image { get; set; }
 
-        [Required]
         //Название парковки
         public string? Name { get; set; }
 
-        [Required]
         //Адрес парковки
-        public string Adress { get; set; }
+        public string? Adress { get; set; }
     }
 }

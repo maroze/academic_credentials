@@ -18,16 +18,12 @@ namespace WebParking.Data.Repositories.Implementations
 
         }
 
-        public Task<ParkingEntityModel> AddParking(ParkingViewModel park)
+        public async Task<ParkingEntityModel> AddParking(ParkingEntityModel park)
         {
-            throw new NotImplementedException();
+            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name, Image = park.Image};
+            Insert(parking);
+            return parking;
         }
-
-        //public async Task<ParkingEntityModel> AddParking(ParkingViewModel park)
-        //{
-        //    Insert(park);
-        //    return park;
-        //}
 
         public async Task<ParkingEntityModel> GetParking(int parkId)
         {

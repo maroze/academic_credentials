@@ -113,22 +113,23 @@ namespace WebParking.Service.Services.Implementations
            
         }
 
-        //Еще думаю как лучше сделать, в гугле только решения с помощью Identity 
-        //public async Task<UserModel> ResetPassword(ResetPasswordViewModel pass)
-        //{
-        //    var user = await _userRepository.ResetPassword(pass);
+        public async Task<UserModel> ResetPassword(ResetPasswordViewModel pass)
+        {
+            if (pass == null)
+                throw new Exception("Пользователь не указан");
+            var user = await _userRepository.ResetPassword(pass);
 
-        //    if (user != null )
-        //    {
-        //        pass.NewPasswod = _passwordEncryption.HashPassword(pass.NewPasswod);
-        //        pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
-        //        return  user;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
+            if (user != null)
+            {
+                pass.NewPasswod = _passwordEncryption.HashPassword(pass.NewPasswod);
+                pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public async Task<bool> UserAlreadyExists(RegisterViewModel user)
         {
