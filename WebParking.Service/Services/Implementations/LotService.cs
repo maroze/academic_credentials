@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +16,21 @@ namespace WebParking.Service.Services.Implementations
     public class LotService : ILotService
     {
         private readonly ILotRepository _lotRepository;
-
         private readonly IParkingRepository _parkRepository;
-        public LotService(ILotRepository lotRepository, IParkingRepository parkRepository)
+        private readonly IMapper _mapper;
+
+        public LotService(ILotRepository lotRepository, IParkingRepository parkRepository, IMapper mapper)
         {
             _lotRepository = lotRepository;
             _parkRepository = parkRepository;
+            _mapper = mapper;
         }
 
         public async Task<LotModel> AddLot(LotModel lot)
         {
             if (lot == null)
                 throw new Exception("Парк место не указано");
-            
-                var result = await _lotRepository.AddLot(lot);
-                return result;
+            return _mapper.Map<LotModel>(await _lotRepository.AddLot(_mapper.Map<LotEntityModel>(lot)));
         }
 
         public async Task<LotModel> BookLot(int lotId)
@@ -38,14 +39,11 @@ namespace WebParking.Service.Services.Implementations
                 throw new Exception("Парк место не указано");
 
             var result = await _lotRepository.BookLot(lotId);
-            if (result != null)
-            {
-                result.IsBooked = true;
-                return result;
-            }
-            else
-                return null;
 
+            if (result != null)
+                result.IsBooked = true;
+
+            return _mapper.Map<LotModel>(result);
         }
 
         public async Task<LotModel> GetLot(int lotId)
@@ -57,7 +55,7 @@ namespace WebParking.Service.Services.Implementations
             {
                 throw new Exception("Парк место не существует");
             }
-            return await result;
+            return _mapper.Map<LotModel>(result);
         }
 
         public IEnumerable<LotModel> GetLots()
@@ -67,7 +65,7 @@ namespace WebParking.Service.Services.Implementations
             foreach (var c in lot_list)
             {
 
-                result.Add(c);
+                result.Add(_mapper.Map<LotModel>(c));
             }
 
             return result;

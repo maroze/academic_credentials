@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.Parking;
 using WebParking.Data.Entities;
 using WebParking.Service.Models;
 

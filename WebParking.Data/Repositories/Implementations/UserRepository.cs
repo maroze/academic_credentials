@@ -1,5 +1,4 @@
-﻿using Library.Common.ViewModels;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using WebParking.Common;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.Auth;
 using WebParking.Data.Data;
 using WebParking.Data.Entities;
 
@@ -32,15 +31,12 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model)
         {
-            var result = await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
-            return result;
+            return await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
         }
 
         public async Task<UserEntityModel> GetById(int id)
         {
-            var result = await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(e => e.UserId == id);
-
-            return result;
+            return await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(e => e.UserId == id);
         }
 
         public async Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role)
@@ -53,6 +49,7 @@ namespace WebParking.Data.Repositories.Implementations
         {
             return await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
         }
+
         public async Task<bool> UserAlreadyExists(RegisterViewModel user)
         {
             return await GetQuery().AnyAsync(x => x.Email == user.Email);

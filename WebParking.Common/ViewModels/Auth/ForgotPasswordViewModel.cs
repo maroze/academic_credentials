@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebParking.Common.ViewModels
+namespace WebParking.Common.ViewModels.Auth
 {
     public class ForgotPasswordViewModel
     {

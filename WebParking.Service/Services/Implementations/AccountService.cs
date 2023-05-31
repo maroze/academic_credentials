@@ -1,4 +1,4 @@
-﻿using Library.Common.ViewModels;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using WebParking.Common;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.Auth;
 using WebParking.Data.Entities;
 using WebParking.Data.Repositories;
 using WebParking.Service.Models;
@@ -25,12 +25,14 @@ namespace WebParking.Service.Services.Implementations
         private readonly IUserRepository _userRepository;
         private readonly IPasswordEncryption _passwordEncryption;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMapper _mapper;
 
-        public AccountService(IUserRepository userRepository, IPasswordEncryption passwordEncryption, RoleManager<IdentityRole> roleManager)
+        public AccountService(IUserRepository userRepository, IPasswordEncryption passwordEncryption, RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _userRepository = userRepository;
             _passwordEncryption = passwordEncryption;
             _roleManager = roleManager;
+            _mapper = mapper;
         }
 
         public async Task<UserModel> Authenticate(LoginViewModel user)
@@ -39,7 +41,7 @@ namespace WebParking.Service.Services.Implementations
                 throw new Exception("Пользователь не указан");
 
             user.Password = _passwordEncryption.HashPassword(user.Password);
-            return await _userRepository.Authenticate(user);
+            return  _mapper.Map<UserModel>( _userRepository.Authenticate(user));
         }
 
         public async Task<UserModel> ForgotPassword(ForgotPasswordViewModel email)
@@ -47,14 +49,14 @@ namespace WebParking.Service.Services.Implementations
             if (email == null)
                 throw new Exception("Почта пользователя не указана");
 
-            var result = _userRepository.ForgotPassword(email);
+            var result = await _userRepository.ForgotPassword(email);
 
             if (result == null)
             {
                 throw new Exception("Пользователь с этой почтой не зарегистрирован");
             }
 
-            return await result;
+            return _mapper.Map<UserModel>(result); ;
         }
 
 
@@ -62,14 +64,13 @@ namespace WebParking.Service.Services.Implementations
         {
             if (id == null)
                 throw new Exception("Id пользователя не указан");
-            var result = _userRepository.GetById(id);
-
+            var result = await _userRepository.GetById(id);
 
             if (result == null)
             {
                 throw new Exception("Пользователя не существует");
             }
-            return await result;
+            return result;
 
         }
 
@@ -80,34 +81,6 @@ namespace WebParking.Service.Services.Implementations
 
             user.Password = _passwordEncryption.HashPassword(user.Password);
             user.ConfirmPassword = _passwordEncryption.HashPassword(user.ConfirmPassword);
-
-            var adminRole = await _roleManager.FindByNameAsync("admin");
-            if (adminRole == null)
-            {
-                var role1 = new IdentityRole { Name = "admin" };
-                await _roleManager.CreateAsync(role1);
-            }
-            var managerRole = await _roleManager.FindByNameAsync("manager");
-            if (managerRole == null)
-            {
-                var role2 = new IdentityRole { Name = "manager" };
-                await _roleManager.CreateAsync(role2);
-            }
-            var userRole = await _roleManager.FindByNameAsync("user");
-            if (userRole == null)
-            {
-                var role3 = new IdentityRole { Name = "user" };
-                await _roleManager.CreateAsync(role3);
-            }
-
-            if (user.Email == "admin@gmail.com")
-            {
-                await _userRepository.Register(user, await _roleManager.FindByNameAsync("admin"));
-            }
-            if (user.Email == "manager@gmail.com")
-            {
-                await _userRepository.Register(user, await _roleManager.FindByNameAsync("manager"));
-            }
 
             await _userRepository.Register(user, await _roleManager.FindByNameAsync("user"));
            
@@ -123,12 +96,8 @@ namespace WebParking.Service.Services.Implementations
             {
                 pass.NewPasswod = _passwordEncryption.HashPassword(pass.NewPasswod);
                 pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
-                return user;
             }
-            else
-            {
-                return null;
-            }
+            return _mapper.Map<UserModel>(user);
         }
 
         public async Task<bool> UserAlreadyExists(RegisterViewModel user)

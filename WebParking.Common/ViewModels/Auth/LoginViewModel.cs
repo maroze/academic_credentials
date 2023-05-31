@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Library.Common.ViewModels
+namespace WebParking.Common.ViewModels.Auth
 {
     /// <summary>
     /// Модель авторизации пользователя

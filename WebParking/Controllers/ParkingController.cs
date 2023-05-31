@@ -1,26 +1,31 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebParking.Service.Services;
-using WebParking.Service;
-using Library.Common.ViewModels;
 using WebParking.Service.Services.Implementations;
 using static System.Net.Mime.MediaTypeNames;
 using WebParking.Data.Entities;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.LotParking;
+using WebParking.Common.ViewModels.Parking;
+using AutoMapper;
+using Microsoft.AspNet.Identity;
+using WebParking.Service.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebParking.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/parkings")]
     [ApiController]
     public class ParkingController : ControllerBase
     {
         private readonly IParkingService _parkService;
         private readonly ILotService _lotService;
+        private readonly IMapper _mapper;
 
-        public ParkingController(IParkingService parkService, ILotService lotService)
+        public ParkingController(IParkingService parkService, ILotService lotService, IMapper mapper)
         {
             _parkService = parkService;
             _lotService = lotService;
+            _mapper = mapper;
         }
 
 
@@ -29,7 +34,9 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        [HttpGet("getparkslot")]
+        [Authorize]
+        [HttpGet]
+        [Route("lots/all")]
         public IActionResult GetLots([FromBody] LotViewModel lot)
         {
             try
@@ -50,7 +57,9 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("booklot")]
+        [Authorize]
+        [HttpPatch]
+        [Route("lots/book/{lot:int}")]
         public async Task<IActionResult> BookLotAsync([FromBody] int lot)
         {
             try
@@ -73,7 +82,9 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        [HttpGet("getlot")]
+        [Authorize]
+        [HttpGet]
+        [Route("lots/{lot:int}")]
         public async Task<IActionResult> GetLotAsync([FromBody] int lot)
         {
             try
@@ -95,14 +106,16 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
-        [HttpPost("create_lot")]
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPost]
+        [Route("lots")]
         public async Task<IActionResult> CreateLotAsync([FromBody] LotViewModel lot)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-                var result = await _lotService.AddLot(lot);
+                var result = await _lotService.AddLot(_mapper.Map<LotModel>(lot));
                 if (result == null)
                 {
                     return BadRequest("doesn't create");
@@ -120,8 +133,10 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
-        [HttpPost("create_imagepark")]
-        public async Task<IActionResult> CreateParkingImgAsync([FromForm] ParkingViewModel park)
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Route("parks")]
+        public async Task<IActionResult> CreateParkingAsync([FromForm] ParkingViewModel park)
         {
             try
             {
@@ -147,8 +162,10 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="parkId">парковка</param>
         /// <returns></returns>
-        [HttpGet("getimage")]
-        public async Task<IActionResult> GetParkingImgAsync([FromBody] int parkId)
+        [Authorize]
+        [HttpGet]
+        [Route("parks/{parkId:int}")]
+        public async Task<IActionResult> GetParkingAsync([FromBody] int parkId)
         {
             try
             {

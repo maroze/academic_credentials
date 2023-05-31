@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebParking.Common.ViewModels
+namespace WebParking.Common.ViewModels.LotParking
 {
     public class LotViewModel
     {
         public int LotId { get; set; }
-        
+
         //Название парк. места
         public string? Name { get; set; }
         [Required]

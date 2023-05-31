@@ -19,29 +19,19 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<LotEntityModel> AddLot(LotEntityModel lot)
         {
-            Insert(lot);
-            return lot;
+            return Insert(lot);
         }
         
         public async Task<LotEntityModel> BookLot(int lotId)
         {
-            var result = await GetQuery().Include(p => p.Parks)
-                .FirstOrDefaultAsync(l => l.LotId == lotId);
-            if (!result.IsBooked)
-            {
-                return result;
-            }
-            else
-                return null;
-
-            
+            return await GetQuery().Include(p => p.Parks)
+                .FirstOrDefaultAsync(l => l.LotId == lotId && !l.IsBooked);
         }
 
         public async Task<LotEntityModel> GetLot(int lotId)
         {
-            var result = await GetQuery().Include(p => p.Parks)
+            return await GetQuery().Include(p => p.Parks)
                 .FirstOrDefaultAsync(l => l.LotId == lotId);
-            return result;
         }
 
         public IEnumerable<LotEntityModel> GetLots()

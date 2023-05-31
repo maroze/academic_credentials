@@ -12,8 +12,8 @@ using WebParking.Data.Data;
 namespace WebParking.Data.Migrations
 {
     [DbContext(typeof(ParkingContext))]
-    [Migration("20230528235847_AddParking")]
-    partial class AddParking
+    [Migration("20230531145905_AddRolesToUsers")]
+    partial class AddRolesToUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,9 +145,9 @@ namespace WebParking.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserLotId"));
 
-                    b.Property<DateTime?>("BookedTime")
+                    b.Property<DateTime?>("EndBookedTime")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("booked_at");
+                        .HasColumnName("booked_end_at");
 
                     b.Property<int>("IdLots")
                         .HasColumnType("integer")
@@ -159,6 +159,10 @@ namespace WebParking.Data.Migrations
 
                     b.Property<int>("LotsLotId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("StartBookedTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("booked_start_at");
 
                     b.Property<int>("UsersUserId")
                         .HasColumnType("integer");

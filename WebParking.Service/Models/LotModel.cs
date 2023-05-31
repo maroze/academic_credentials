@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.LotParking;
 using WebParking.Data.Entities;
 
 namespace WebParking.Service.Models
@@ -19,75 +19,5 @@ namespace WebParking.Service.Models
         //Состояние парк. места забронировано/свободно
         public bool IsBooked { get; set; }
         public int IdParks { get; set; }
-        public static implicit operator LotEntityModel(LotModel model)
-        {
-
-            if (model == null)
-            {
-
-                return null;
-
-            }
-            else return new LotEntityModel
-            {
-                LotId = model.LotId,
-                Name = model.Name,
-                IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked,
-                IdParks =model.IdParks
-            };
-        }
-        public static implicit operator LotModel(LotEntityModel model)
-        {
-
-            if (model == null)
-            {
-
-                return null;
-
-            }
-            else return new LotModel
-            {
-                LotId = model.LotId,
-                Name = model.Name,
-                IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked,
-                IdParks = model.IdParks
-            };
-        }
-        public static implicit operator LotViewModel(LotModel model)
-        {
-
-            if (model == null)
-            {
-
-                return null;
-
-            }
-            else return new LotViewModel
-            {
-                LotId = model.LotId,
-                Name = model.Name,
-                IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked
-            };
-        }
-        public static implicit operator LotModel(LotViewModel model)
-        {
-
-            if (model == null)
-            {
-
-                return null;
-
-            }
-            else return new LotModel
-            {
-                LotId = model.LotId,
-                Name = model.Name,
-                IsBlocked = model.IsBlocked,
-                IsBooked = model.IsBooked
-            };
-        }
     }
 }

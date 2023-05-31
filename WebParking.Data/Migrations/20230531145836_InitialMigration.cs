@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebParking.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRole : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -89,7 +90,8 @@ namespace WebParking.Data.Migrations
                 {
                     user_lot_id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    booked_at = table.Column<string>(type: "text", nullable: false),
+                    booked_start_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    booked_end_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     id_lots = table.Column<int>(type: "integer", nullable: false),
                     LotsLotId = table.Column<int>(type: "integer", nullable: false),
                     is_users = table.Column<int>(type: "integer", nullable: false),

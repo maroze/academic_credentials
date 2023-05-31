@@ -1,5 +1,4 @@
-﻿using Library.Common.ViewModels;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using WebParking.Common.ViewModels;
+using WebParking.Common.ViewModels.Auth;
 using WebParking.Data.Entities;
 using WebParking.Service.Models;
 

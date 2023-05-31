@@ -20,17 +20,13 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<ParkingEntityModel> AddParking(ParkingEntityModel park)
         {
-            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name, Image = park.Image};
-            Insert(parking);
-            return parking;
+            return Insert(park);
         }
 
         public async Task<ParkingEntityModel> GetParking(int parkId)
         {
-            var result = await GetQuery()
+            return await GetQuery()
                   .FirstOrDefaultAsync(p => p.ParkId == parkId);
-
-            return result;
         }
     }
 }

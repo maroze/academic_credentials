@@ -45,17 +45,20 @@ namespace WebParking
             //scoped мы получаем один и тот же инстанс в рамках одного HTTP-запроса, и разные для разных HTTP-запросов
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAccountService, AccountService>();
+
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPasswordEncryption, PasswordEncryption>();
+
             services.AddScoped<IParkingRepository, ParkingRepository>();
             services.AddScoped<IParkingService, ParkingService>();
+
             services.AddScoped<ILotRepository, LotRepository>();
             services.AddScoped<ILotService,LotService>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ParkingContext>();
 
-
+            services.AddAutoMapper(typeof(Startup));
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfig")["secret"]);
             services.AddAuthentication(x =>

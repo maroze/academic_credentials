@@ -1,35 +1,35 @@
-﻿using Library.Common.ViewModels;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebParking.Common.ViewModels;
 using WebParking.Data.Entities;
 using WebParking.Service.Models;
 using WebParking.Service.Services;
 using WebParking.Service.Services.Implementations;
 using WebParking.Services.EmailServices;
-
+using WebParking.Common.ViewModels.Auth;
+using AutoMapper;
 
 namespace WebParking.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/accounts")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
         private readonly IEmailSender _emailSender;
-       
+        private readonly IMapper _mapper;
 
-        public AccountController(IAccountService accountService, ITokenService tokenService, IEmailSender emailSender)
+        public AccountController(IAccountService accountService, ITokenService tokenService, IEmailSender emailSender, IMapper mapper)
         {
             _accountService = accountService;
             _tokenService = tokenService;
             _emailSender = emailSender;
+            _mapper=mapper;
         }
 
         /// <summary>
@@ -37,7 +37,8 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("getuser")]
+        [HttpGet]
+        [Route("users/{id:int}")]
         public async Task<IActionResult> GetUserAsync([FromBody] int id)
         {
             try
@@ -81,7 +82,7 @@ namespace WebParking.Controllers
 
                 if (loguser.Result != null)
                 {
-                    return Ok(_tokenService.GenerateSecurityToken(user));
+                    return Ok(_tokenService.GenerateSecurityToken(_mapper.Map<UserEntityModel>(user)));
                 }
 
                 else
@@ -98,8 +99,9 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-
-        [HttpPost("forgot-pass")]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("forgot-password")]
         public IActionResult Forgot([FromBody] ForgotPasswordViewModel user)
         {
             try
@@ -110,7 +112,7 @@ namespace WebParking.Controllers
                 if (_accountService.ForgotPassword(user).Result != null)
                 {
 
-                    var token = _tokenService.GenerateSecurityToken(user);
+                    var token = _tokenService.GenerateSecurityToken(_mapper.Map<UserEntityModel>(user));
 
                     var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
                     var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
@@ -126,13 +128,15 @@ namespace WebParking.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Регистрация пользователя
         /// </summary>
         /// <param name="model">логин, пароль, повторить пароль</param>
         /// <returns></returns>
-        [HttpPost("register")]
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             
@@ -154,7 +158,7 @@ namespace WebParking.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("[action]")]
+        [HttpHead("logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
@@ -162,8 +166,9 @@ namespace WebParking.Controllers
             return Redirect("/");
         }
 
-        [HttpPost]
+        [HttpPatch]
         [AllowAnonymous]
+        [Route("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPassword)
         {
             try

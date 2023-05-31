@@ -1,5 +1,4 @@
-﻿using Library.Common.ViewModels;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,15 +20,15 @@ namespace WebParking.Service.Services.Implementations
         private string myexpDate;
 
         private readonly IUserRepository _userRepository;
+        
         public TokenService(IConfiguration config, IUserRepository userRepository)
         {
             mysecret = config.GetSection("JwtConfig").GetSection("secret").Value;
             myexpDate = config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value;
             _userRepository = userRepository;
-
         }
 
-        public string GenerateSecurityToken(UserModel user)
+        public string GenerateSecurityToken(UserEntityModel user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);
@@ -37,7 +36,8 @@ namespace WebParking.Service.Services.Implementations
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.Name),
             }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

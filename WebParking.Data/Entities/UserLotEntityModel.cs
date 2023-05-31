@@ -16,9 +16,13 @@ namespace WebParking.Data.Entities
         [Column("user_lot_id")]
         public int UserLotId { get; set; }
 
-        //Время бронирования парк. места
-        [Column("booked_at")]
-        public DateTime? BookedTime { get; set; }
+        //Время начала бронирования парк. места
+        [Column("booked_start_at")]
+        public DateTime? StartBookedTime { get; set; }
+
+        //Время конца бронирования парк. места
+        [Column("booked_end_at")]
+        public DateTime? EndBookedTime { get; set; }
 
         //Внешний ключ парк. места
         [Column("id_lots")]

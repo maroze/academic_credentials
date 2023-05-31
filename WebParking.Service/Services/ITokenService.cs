@@ -1,5 +1,4 @@
-﻿using Library.Common.ViewModels;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,6 @@ namespace WebParking.Service.Services
     public interface ITokenService
     {
 
-        public string GenerateSecurityToken(UserModel user);
+        public string GenerateSecurityToken(UserEntityModel user);
     }
 }
