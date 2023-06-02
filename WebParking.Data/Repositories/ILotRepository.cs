@@ -28,7 +28,21 @@ namespace WebParking.Data.Repositories
         /// </summary>
         /// <param name="lotId"></param>
         /// <returns></returns>
-        Task<LotEntityModel> BookLot(int lotId);
+        //Task<LotEntityModel> BookLot(int lotId);
+
+        /// <summary>
+        /// Обновление информации места парковки
+        /// </summary>
+        /// <param name="lot"></param>
+        /// <returns></returns>
+        Task<LotEntityModel> UpdateLot(LotEntityModel lot);
+
+        /// <summary>
+        /// Удаление места парковки
+        /// </summary>
+        /// <param name="lotId"></param>
+        /// <returns></returns>
+        Task<LotEntityModel> DeleteLot(int lotId);
 
         /// <summary>
         /// Создание парк. мест

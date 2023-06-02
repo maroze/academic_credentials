@@ -24,12 +24,12 @@ namespace WebParking.Service.Services
         /// <returns></returns>
         public IEnumerable<LotModel> GetLots();
 
-        /// <summary>
-        /// Бронирование парк. места
-        /// </summary>
-        /// <param name="lotId"></param>
-        /// <returns></returns>
-        Task<LotModel> BookLot(int lotId);
+        ///// <summary>
+        ///// Бронирование парк. места
+        ///// </summary>
+        ///// <param name="lotId"></param>
+        ///// <returns></returns>
+        //Task<LotModel> BookLot(int lotId);
 
         /// <summary>
         /// Создание парк. мест

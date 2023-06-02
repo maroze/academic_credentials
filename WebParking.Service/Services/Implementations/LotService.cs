@@ -33,18 +33,18 @@ namespace WebParking.Service.Services.Implementations
             return _mapper.Map<LotModel>(await _lotRepository.AddLot(_mapper.Map<LotEntityModel>(lot)));
         }
 
-        public async Task<LotModel> BookLot(int lotId)
-        {
-            if (lotId == null)
-                throw new Exception("Парк место не указано");
+        //public async Task<LotModel> BookLot(int lotId)
+        //{
+        //    if (lotId == null)
+        //        throw new Exception("Парк место не указано");
 
-            var result = await _lotRepository.BookLot(lotId);
+        //    var result = await _lotRepository.BookLot(lotId);
 
-            if (result != null)
-                result.IsBooked = true;
+        //    if (result != null)
+        //        result.IsBooked = true;
 
-            return _mapper.Map<LotModel>(result);
-        }
+        //    return _mapper.Map<LotModel>(result);
+        //}
 
         public async Task<LotModel> GetLot(int lotId)
         {

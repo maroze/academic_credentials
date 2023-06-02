@@ -23,10 +23,25 @@ namespace WebParking.Data.Repositories.Implementations
             return Insert(park);
         }
 
+        public Task<ParkingEntityModel> DeleteParking(int parkingId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ParkingEntityModel> GetParking(int parkId)
         {
             return await GetQuery()
                   .FirstOrDefaultAsync(p => p.ParkId == parkId);
+        }
+
+        public IEnumerable<ParkingEntityModel> GetParkins()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ParkingEntityModel> UpdateParking(ParkingEntityModel parking)
+        {
+            throw new NotImplementedException();
         }
     }
 }

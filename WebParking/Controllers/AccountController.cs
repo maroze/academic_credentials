@@ -39,7 +39,7 @@ namespace WebParking.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("users/{id:int}")]
-        public async Task<IActionResult> GetUserAsync([FromBody] int id)
+        public async Task<IActionResult> GetUserAsync([FromRoute] int id)
         {
             try
             {

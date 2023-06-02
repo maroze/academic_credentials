@@ -37,7 +37,7 @@ namespace WebParking.Controllers
         [Authorize]
         [HttpGet]
         [Route("lots/all")]
-        public IActionResult GetLots([FromBody] LotViewModel lot)
+        public IActionResult GetLots([FromRoute] LotViewModel lot)
         {
             try
             {
@@ -57,25 +57,25 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [Authorize]
-        [HttpPatch]
-        [Route("lots/book/{lot:int}")]
-        public async Task<IActionResult> BookLotAsync([FromBody] int lot)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _lotService.BookLot(lot);
-                if (result == null)
-                    return BadRequest("Lot unavailable for book");
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //[Authorize]
+        //[HttpPatch]
+        //[Route("lots/book/{lot:int}")]
+        //public async Task<IActionResult> BookLotAsync([FromBody] int lot)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //            return BadRequest("Invalid request data");
+        //        var result = await _lotService.BookLot(lot);
+        //        if (result == null)
+        //            return BadRequest("Lot unavailable for book");
+        //        return Ok();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         /// <summary>
         /// Вывод адреса, места и времени парковки забронированной пользователем
@@ -85,7 +85,7 @@ namespace WebParking.Controllers
         [Authorize]
         [HttpGet]
         [Route("lots/{lot:int}")]
-        public async Task<IActionResult> GetLotAsync([FromBody] int lot)
+        public async Task<IActionResult> GetLotAsync([FromRoute] int lot)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace WebParking.Controllers
         [Authorize]
         [HttpGet]
         [Route("parks/{parkId:int}")]
-        public async Task<IActionResult> GetParkingAsync([FromBody] int parkId)
+        public async Task<IActionResult> GetParkingAsync([FromRoute] int parkId)
         {
             try
             {

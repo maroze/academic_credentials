@@ -19,14 +19,19 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<LotEntityModel> AddLot(LotEntityModel lot)
         {
-            return Insert(lot);
+            return await InsertAsync(lot);
         }
-        
-        public async Task<LotEntityModel> BookLot(int lotId)
+
+        public Task<LotEntityModel> DeleteLot(int lotId)
         {
-            return await GetQuery().Include(p => p.Parks)
-                .FirstOrDefaultAsync(l => l.LotId == lotId && !l.IsBooked);
+            throw new NotImplementedException();
         }
+
+        //public async Task<LotEntityModel> BookLot(int lotId)
+        //{
+        //    return await GetQuery().Include(p => p.Parks)
+        //        .FirstOrDefaultAsync(l => l.LotId == lotId && !l.IsBooked);
+        //}
 
         public async Task<LotEntityModel> GetLot(int lotId)
         {
@@ -37,6 +42,11 @@ namespace WebParking.Data.Repositories.Implementations
         public IEnumerable<LotEntityModel> GetLots()
         {
             return GetAll().ToList();
+        }
+
+        public Task<LotEntityModel> UpdateLot(LotEntityModel lot)
+        {
+            throw new NotImplementedException();
         }
     }
 }
