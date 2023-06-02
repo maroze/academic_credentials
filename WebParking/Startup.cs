@@ -15,6 +15,8 @@ using WebParking.Data.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using WebParking.Service.Mappings;
 
 namespace WebParking
 {
@@ -59,6 +61,11 @@ namespace WebParking
             .AddEntityFrameworkStores<ParkingContext>();
 
             services.AddAutoMapper(typeof(Startup));
+            var mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
+            services.AddSingleton(mapperConfig.CreateMapper());
 
             var secret = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtConfig")["secret"]);
             services.AddAuthentication(x =>

@@ -17,9 +17,11 @@ namespace WebParking.Service.Mappings
         public MappingProfile()
         {
             CreateMap<UserEntityModel, UserModel>().ReverseMap();
-            CreateMap<UserModel, LoginViewModel>();
+            CreateMap<UserModel, LoginViewModel>().ReverseMap();
+            CreateMap<UserEntityModel, LoginViewModel>().ReverseMap();
             CreateMap<UserModel, ForgotPasswordViewModel>();
             CreateMap<UserModel, ResetPasswordViewModel>();
+            CreateMap<UserModel, RegisterViewModel>();
 
             CreateMap<ParkingModel, ParkingViewModel>().ReverseMap();
             CreateMap<ParkingEntityModel, ParkingModel>().ReverseMap();

@@ -41,7 +41,8 @@ namespace WebParking.Service.Services.Implementations
                 throw new Exception("Пользователь не указан");
 
             user.Password = _passwordEncryption.HashPassword(user.Password);
-            return  _mapper.Map<UserModel>( _userRepository.Authenticate(user));
+            var loguser = await _userRepository.Authenticate(user);
+            return _mapper.Map<UserModel>( loguser);
         }
 
         public async Task<UserModel> ForgotPassword(ForgotPasswordViewModel email)

@@ -71,18 +71,18 @@ namespace WebParking.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public IActionResult Login([FromBody] LoginViewModel user)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginViewModel user)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
 
-                var loguser = _accountService.Authenticate(user);
+                var loguser = await _accountService.Authenticate(user);
 
-                if (loguser.Result != null)
+                if (loguser != null)
                 {
-                    return Ok(_tokenService.GenerateSecurityToken(_mapper.Map<UserEntityModel>(user)));
+                    return Ok();
                 }
 
                 else

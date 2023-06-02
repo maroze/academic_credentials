@@ -24,9 +24,9 @@ namespace WebParking.Data.Repositories.Implementations
         {
         }
 
-        public Task<UserEntityModel> Authenticate(LoginViewModel user)
+        public async Task<UserEntityModel> Authenticate(LoginViewModel user)
         {
-            return GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
         }
 
         public async Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model)
