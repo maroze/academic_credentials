@@ -28,16 +28,18 @@ namespace WebParking.Service.Services.Implementations
             _userRepository = userRepository;
         }
 
-        public string GenerateSecurityToken(UserEntityModel user)
+        public async Task<string> GenerateSecurityTokenAsync(UserEntityModel user)
         {
+            var result = await _userRepository.GetById(user.UserId);
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(mysecret);
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Email, result.Email),
+                new Claim(ClaimTypes.Role,  result.Role.Name),
             }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -13,7 +13,7 @@ namespace WebParking.Data.Data
     {
         public ParkingContext(DbContextOptions<ParkingContext> options) : base(options)
         {
-            Database.EnsureCreated(); // создаем базу данных при первом обращении
+            //Database.EnsureCreated(); // создаем базу данных при первом обращении
             
         }
         public DbSet<UserEntityModel> Users { get; set; }

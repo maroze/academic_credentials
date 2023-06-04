@@ -32,7 +32,7 @@ namespace WebParking.Data.Repositories.Implementations
         {
             return context.Set<T>();
         }
-
+        
         public T Insert(T entity)
         {
             context.Set<T>().Add(entity);

@@ -53,7 +53,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserEntityModel> GetUserById(int id);
+        Task<UserViewModel> GetUserById(int id);
        
     }
 }

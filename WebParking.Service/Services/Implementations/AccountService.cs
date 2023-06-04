@@ -42,7 +42,8 @@ namespace WebParking.Service.Services.Implementations
 
             user.Password = _passwordEncryption.HashPassword(user.Password);
             var loguser = await _userRepository.Authenticate(user);
-            return _mapper.Map<UserModel>( loguser);
+
+            return _mapper.Map<UserModel>(loguser);
         }
 
         public async Task<UserModel> ForgotPassword(ForgotPasswordViewModel email)
@@ -61,17 +62,18 @@ namespace WebParking.Service.Services.Implementations
         }
 
 
-        public async Task<UserEntityModel> GetUserById(int id)
+        public async Task<UserViewModel> GetUserById(int id)
         {
             if (id == null)
                 throw new Exception("Id пользователя не указан");
-            var result = await _userRepository.GetById(id);
 
+            var result = await _userRepository.GetById(id);
+            UserViewModel model = new UserViewModel() { Email = result.Email, Role = result.Role.Name };
             if (result == null)
             {
                 throw new Exception("Пользователя не существует");
             }
-            return result;
+            return model;
 
         }
 
@@ -82,22 +84,19 @@ namespace WebParking.Service.Services.Implementations
 
             user.Password = _passwordEncryption.HashPassword(user.Password);
             user.ConfirmPassword = _passwordEncryption.HashPassword(user.ConfirmPassword);
+            var role = await _roleManager.FindByNameAsync("user");
+            await _userRepository.Register(user, role);
 
-            await _userRepository.Register(user, await _roleManager.FindByNameAsync("user"));
-           
         }
 
         public async Task<UserModel> ResetPassword(ResetPasswordViewModel pass)
         {
             if (pass == null)
                 throw new Exception("Пользователь не указан");
-            var user = await _userRepository.ResetPassword(pass);
 
-            if (user != null)
-            {
-                pass.NewPasswod = _passwordEncryption.HashPassword(pass.NewPasswod);
-                pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
-            }
+            pass.NewPassword = _passwordEncryption.HashPassword(pass.NewPassword);
+            pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
+            var user = await _userRepository.ResetPassword(pass);
             return _mapper.Map<UserModel>(user);
         }
 

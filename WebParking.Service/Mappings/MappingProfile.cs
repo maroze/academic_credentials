@@ -22,6 +22,7 @@ namespace WebParking.Service.Mappings
             CreateMap<UserModel, ForgotPasswordViewModel>();
             CreateMap<UserModel, ResetPasswordViewModel>();
             CreateMap<UserModel, RegisterViewModel>();
+            CreateMap<UserViewModel, UserEntityModel>().ReverseMap();
 
             CreateMap<ParkingModel, ParkingViewModel>().ReverseMap();
             CreateMap<ParkingEntityModel, ParkingModel>().ReverseMap();

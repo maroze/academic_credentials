@@ -22,25 +22,6 @@ namespace WebParking.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityRole");
-                });
-
             modelBuilder.Entity("WebParking.Data.Entities.LotEntityModel", b =>
                 {
                     b.Property<int>("LotId")
@@ -124,13 +105,21 @@ namespace WebParking.Data.Migrations
                         .HasColumnName("password");
 
                     b.Property<string>("RoleId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 4,
+                            Email = "user123@gmail.com",
+                            Password = "uLPgvqSITeMvVge9ngnqiazK9ZZf7WMT/Ro9Z4BrAkM=",
+                            RoleId = "b7883915-6e29-42a1-8c85-39ff4aa69b53"
+                        });
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.UserLotEntityModel", b =>
@@ -182,15 +171,6 @@ namespace WebParking.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Parks");
-                });
-
-            modelBuilder.Entity("WebParking.Data.Entities.UserEntityModel", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.UserLotEntityModel", b =>

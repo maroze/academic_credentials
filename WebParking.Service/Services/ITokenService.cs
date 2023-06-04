@@ -13,6 +13,6 @@ namespace WebParking.Service.Services
     public interface ITokenService
     {
 
-        public string GenerateSecurityToken(UserEntityModel user);
+        public Task<string> GenerateSecurityTokenAsync(UserEntityModel user);
     }
 }

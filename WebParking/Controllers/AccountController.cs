@@ -29,7 +29,7 @@ namespace WebParking.Controllers
             _accountService = accountService;
             _tokenService = tokenService;
             _emailSender = emailSender;
-            _mapper=mapper;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -82,7 +82,9 @@ namespace WebParking.Controllers
 
                 if (loguser != null)
                 {
-                    return Ok();
+                    UserRoleViewModel model = new UserRoleViewModel() { Role = loguser.Role, Token = await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)) };
+
+                    return Ok(model);
                 }
 
                 else
@@ -102,17 +104,17 @@ namespace WebParking.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("forgot-password")]
-        public IActionResult Forgot([FromBody] ForgotPasswordViewModel user)
+        public async Task<IActionResult> ForgotAsync([FromBody] ForgotPasswordViewModel user)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
 
-                if (_accountService.ForgotPassword(user).Result != null)
+                if (await _accountService.ForgotPassword(user) != null)
                 {
 
-                    var token = _tokenService.GenerateSecurityToken(_mapper.Map<UserEntityModel>(user));
+                    var token = _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(user));
 
                     var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
                     var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
@@ -139,7 +141,7 @@ namespace WebParking.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            
+
             if (await _accountService.UserAlreadyExists(model))
                 return BadRequest("User already exists, please try something else");
 
@@ -175,13 +177,12 @@ namespace WebParking.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-
                 var user = await _accountService.ResetPassword(resetPassword);
-            if (user!=null )
-            {
+                if (user != null)
+                {
                     return Ok();
-            }
-            else
+                }
+                else
                     return BadRequest("Password doesn't change");
             }
             catch (Exception e)

@@ -26,7 +26,6 @@ namespace WebParking.Data.Entities
         public string Password { get; set; }
 
         //Роль (Админ, Менеджер, Пользователь)
-        [Column("role")]
         public IdentityRole Role { get; set; }
     }
 }

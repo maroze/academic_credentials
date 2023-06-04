@@ -13,6 +13,7 @@ namespace WebParking.Common.ViewModels.Parking
     /// </summary>
     public class ParkingViewModel
     {
+        public int ParkId { get;set; }
         //Изображение парковки
         [Required]
         public IFormFile Image { get; set; }

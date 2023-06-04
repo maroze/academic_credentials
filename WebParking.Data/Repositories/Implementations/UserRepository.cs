@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<UserEntityModel> Authenticate(LoginViewModel user)
         {
-            return await GetQuery().FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
         }
 
         public async Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model)
@@ -36,18 +37,23 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<UserEntityModel> GetById(int id)
         {
-            return await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(e => e.UserId == id);
+            return await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(u => u.UserId ==id);
         }
 
         public async Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role)
         {
-            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email, Role = role };
+            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email, Role=role };
             return await InsertAsync(userEntity);
         }
 
         public async Task<UserEntityModel> ResetPassword(ResetPasswordViewModel model)
         {
-            return await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
+            var result = await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
+            if (result != null)
+            {
+                result.Password = model.NewPassword;
+            }
+            return await UpdateAsync(result) ;
         }
 
         public async Task<bool> UserAlreadyExists(RegisterViewModel user)
