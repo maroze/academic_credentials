@@ -74,7 +74,19 @@ namespace WebParking.Service.Services.Implementations
             {
                 imageData = binaryReader.ReadBytes((int)model.Avatar.Length);
             }
-            user = _mapper.Map < UserEntityModel > (model);
+            if (model.Email==null)
+            {
+                user.FirstName = model.FirstName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.LastName = model.LastName;
+                user.PlateNumder = model.PlateNumder;
+                user.Avatar = imageData;
+            }
+            user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.LastName = model.LastName;
+            user.PlateNumder = model.PlateNumder;
             user.Avatar = imageData;
             
             return _mapper.Map<UserModel>(await _userRepository.ChangeProfile(user));

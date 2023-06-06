@@ -17,7 +17,12 @@ namespace WebParking.Data.Entities
         [Key]
         [Column("lot_id")]
         public int LotId { get; set; }
-
+/// <summary>
+        /// Внешний ключ парковки
+        /// </summary>
+        [Column("id_parkings")]
+        public int IdParks { get; set; }
+        public ParkingEntityModel Parks { get; set; }  
         /// <summary>
         /// Название парк. места
         /// </summary>
@@ -36,11 +41,6 @@ namespace WebParking.Data.Entities
         [Column("is_booked")]
         public bool IsBooked { get; set; }
 
-        /// <summary>
-        /// Внешний ключ парковки
-        /// </summary>
-        [Column("id_parkings")]
-        public int IdParks { get; set; }
-        public ParkingEntityModel Parks { get; set; }        
+        public List<UserLotEntityModel> UserLots { get; set; }
     }
 }

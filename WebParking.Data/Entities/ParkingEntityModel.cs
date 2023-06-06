@@ -35,5 +35,6 @@ namespace WebParking.Data.Entities
         /// </summary>
         [Column("adress")]
         public string? Adress { get; set; }
+        public List<LotEntityModel> Lots { get; set; }
     }
 }

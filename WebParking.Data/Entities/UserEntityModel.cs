@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -61,5 +62,6 @@ namespace WebParking.Data.Entities
         /// Номер машины
         /// </summary>
         public string? PlateNumder { get; set; }
+        public List<UserLotEntityModel> UserLots { get; set; }
     }
 }

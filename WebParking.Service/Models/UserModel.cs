@@ -23,7 +23,7 @@ namespace WebParking.Service.Models
         public string Password { get; set; }
         public string Role { get; set; }
 
-        public IFormFile? Avatar { get; set; }
+        public byte[]? Avatar { get; set; }
 
         public string? FirstName { get; set; }
 

@@ -12,7 +12,7 @@ namespace WebParking.Service.Models
 {
     public class ParkingModel
     {
-        public IFormFile Image { get; set; }
+        public byte[] Image { get; set; }
 
         //Название парковки
         public string? Name { get; set; }

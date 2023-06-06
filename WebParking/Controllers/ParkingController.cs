@@ -15,7 +15,8 @@ namespace WebParking.Controllers
 {
     [Route("api/parkings")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class ParkingController : ControllerBase
     {
         private readonly IParkingService _parkService;
@@ -204,7 +205,7 @@ namespace WebParking.Controllers
 
         [HttpPut]
         [Route("parks/{parkId:int}")]
-        public async Task<IActionResult> UpdateParkingAsync([FromBody] ParkingViewModel park)
+        public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingViewModel park)
         {
             try
             {

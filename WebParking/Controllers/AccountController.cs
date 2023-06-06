@@ -17,7 +17,8 @@ namespace WebParking.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -145,11 +146,11 @@ namespace WebParking.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-
-                if (await _accountService.ForgotPassword(user) != null)
+                var u = await _accountService.ForgotPassword(user);
+                if (u != null)
                 {
 
-                    var token = _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(user));
+                    var token = _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(u));
 
                     var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
                     var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);

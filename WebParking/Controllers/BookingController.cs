@@ -8,7 +8,8 @@ namespace WebParking.Controllers
 {
     [Route("api/booking")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
