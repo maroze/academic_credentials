@@ -25,7 +25,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<bool> UserAlreadyExists(RegisterViewModel user);
+        Task<bool> UserAlreadyExists(string email);
 
         /// <summary>
         /// Аутентификация пользователя
@@ -53,8 +53,29 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserViewModel> GetUserById(int id);
-       
+        Task<ProfileUserViewModel> GetUserById(int id);
+
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<UserModel> DeleteUser(int userId);
+
+        /// <summary>
+        /// Изменение пароля пользователя
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserModel> ChangePassword(ChangePasswordViewModel model);
+
+        /// <summary>
+        /// Изменение личного кабинета
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserModel> ChangeProfile(ProfileUserViewModel model);
+
     }
 }
 

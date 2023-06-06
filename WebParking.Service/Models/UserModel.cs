@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,15 @@ namespace WebParking.Service.Models
         public string Token { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+
+        public IFormFile? Avatar { get; set; }
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string? PhoneNumber { get; set; }
+
+        public string? PlateNumder { get; set; }
     }
 }

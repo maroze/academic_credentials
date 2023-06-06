@@ -11,20 +11,28 @@ namespace WebParking.Data.Entities
     [Table("Parkings")]
     public class ParkingEntityModel
     {
-        //Id парковки
+        /// <summary>
+        /// Id парковки
+        /// </summary>
         [Key]
         [Column("parking_id")]
         public int ParkId { get; set; }
 
-        //Фото парковочных мест
+        /// <summary>
+        /// Фото парковочных мест
+        /// </summary>
         [Column("image")]
         public byte[] Image { get; set; }
 
-        //Название парковки
+        /// <summary>
+        /// Название парковки
+        /// </summary>
         [Column("name")]
         public string? Name { get; set; }
 
-        //Адрес парковки
+        /// <summary>
+        /// Адрес парковки
+        /// </summary>
         [Column("adress")]
         public string? Adress { get; set; }
     }

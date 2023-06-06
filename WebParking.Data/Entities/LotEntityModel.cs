@@ -11,24 +11,34 @@ namespace WebParking.Data.Entities
     [Table("Lots")]
     public class LotEntityModel
     {
-        //Id парковочного места
+        /// <summary>
+        /// Id парковочного места
+        /// </summary>
         [Key]
         [Column("lot_id")]
         public int LotId { get; set; }
 
-        //Название парк. места
+        /// <summary>
+        /// Название парк. места
+        /// </summary>
         [Column("name")]
         public string Name { get; set; }
 
-        //Состояние парк. места доступно/недоступно для бронирования
+        /// <summary>
+        /// Состояние парк. места доступно/недоступно для бронирования
+        /// </summary>
         [Column("is_bloked")]
         public bool IsBlocked { get; set; }
 
-        //Состояние парк. места забронировано/свободно
+        /// <summary>
+        /// Состояние парк. места забронировано/свободно
+        /// </summary>
         [Column("is_booked")]
         public bool IsBooked { get; set; }
 
-        //Внешний ключ парковки
+        /// <summary>
+        /// Внешний ключ парковки
+        /// </summary>
         [Column("id_parkings")]
         public int IdParks { get; set; }
         public ParkingEntityModel Parks { get; set; }        

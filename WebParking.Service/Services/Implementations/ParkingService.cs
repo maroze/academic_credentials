@@ -38,6 +38,14 @@ namespace WebParking.Service.Services.Implementations
             return _mapper.Map<ParkingModel>(await _parkRepository.AddParking(parking));
         }
 
+        public async Task<ParkingModel> DeleteParking(int parkingId)
+        {
+            if (parkingId == null)
+                throw new Exception("Id парковки не указано");
+
+            return _mapper.Map<ParkingModel>(await _parkRepository.DeleteParking(parkingId));
+        }
+
         public async Task<ParkingModel> GetParking(int parkId)
         {
             if (parkId == null)
@@ -50,6 +58,21 @@ namespace WebParking.Service.Services.Implementations
                 throw new Exception("Парковки не существует");
             }
             return _mapper.Map<ParkingModel>(result);
+        }
+
+        public IEnumerable<ParkingModel> GetParkins()
+        {
+            var park_list = _parkRepository.GetParkins();
+            return _mapper.Map<IEnumerable<ParkingModel>>(park_list);
+        }
+
+        public async Task<ParkingModel> UpdateParking(ParkingViewModel parking)
+        {
+            var res = await _parkRepository.GetParking(parking.ParkId);
+            if (res == null)
+                throw new Exception("Парковки не существует");
+            res = _mapper.Map<ParkingEntityModel>(parking);
+            return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
         }
     }
 }

@@ -22,31 +22,27 @@ namespace WebParking.Data.Repositories.Implementations
             return await InsertAsync(lot);
         }
 
-        public Task<LotEntityModel> DeleteLot(int lotId)
+        public async Task<LotEntityModel> DeleteLot(int lotId)
         {
-            throw new NotImplementedException();
+            var result = await GetQuery()
+               .FirstOrDefaultAsync(l=>l.LotId==lotId);
+            return await DeleteAsync(result);
         }
-
-        //public async Task<LotEntityModel> BookLot(int lotId)
-        //{
-        //    return await GetQuery().Include(p => p.Parks)
-        //        .FirstOrDefaultAsync(l => l.LotId == lotId && !l.IsBooked);
-        //}
 
         public async Task<LotEntityModel> GetLot(int lotId)
         {
-            return await GetQuery().Include(p => p.Parks)
-                .FirstOrDefaultAsync(l => l.LotId == lotId);
+            return await GetQuery().Include(p => p.Parks).FirstOrDefaultAsync(l => l.LotId == lotId);
         }
 
-        public IEnumerable<LotEntityModel> GetLots()
+        public IEnumerable<LotEntityModel> GetLots(int idpark)
         {
-            return GetAll().ToList();
+            return GetAll().Where(u => u.IdParks == idpark).ToList();
         }
 
-        public Task<LotEntityModel> UpdateLot(LotEntityModel lot)
+        public async Task<LotEntityModel> UpdateLot(LotEntityModel lot)
         {
-            throw new NotImplementedException();
+            
+            return await UpdateAsync(lot);
         }
     }
 }

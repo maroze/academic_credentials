@@ -30,6 +30,24 @@ namespace WebParking.Data.Repositories.Implementations
             return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
         }
 
+        public async Task<UserEntityModel> ChangePassword(ChangePasswordViewModel model)
+        {
+            var result = await GetQuery().FirstOrDefaultAsync(x => x.Email == model.Email && x.Password == model.OldPassword);
+            result.Password = model.NewPassword;
+            return await UpdateAsync(result);
+        }
+
+        public async Task<UserEntityModel> ChangeProfile(UserEntityModel model)
+        {
+            return await UpdateAsync(model);
+        }
+
+        public async Task<UserEntityModel> DeleteUser(int userId)
+        {
+            var result = await GetQuery().FirstOrDefaultAsync(u => u.UserId == userId);
+            return await DeleteAsync(result);
+        }
+
         public async Task<UserEntityModel> ForgotPassword(ForgotPasswordViewModel model)
         {
             return await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
@@ -37,12 +55,12 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<UserEntityModel> GetById(int id)
         {
-            return await GetQuery().Include(r=>r.Role).FirstOrDefaultAsync(u => u.UserId ==id);
+            return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role)
         {
-            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email, Role=role };
+            UserEntityModel userEntity = new UserEntityModel() { Password = user.Password, Email = user.Email, Role = role };
             return await InsertAsync(userEntity);
         }
 
@@ -53,12 +71,12 @@ namespace WebParking.Data.Repositories.Implementations
             {
                 result.Password = model.NewPassword;
             }
-            return await UpdateAsync(result) ;
+            return await UpdateAsync(result);
         }
 
-        public async Task<bool> UserAlreadyExists(RegisterViewModel user)
+        public async Task<bool> UserAlreadyExists(string email)
         {
-            return await GetQuery().AnyAsync(x => x.Email == user.Email);
+            return await GetQuery().AnyAsync(x => x.Email == email);
         }
     }
 }

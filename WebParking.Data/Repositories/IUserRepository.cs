@@ -19,11 +19,32 @@ namespace WebParking.Data.Repositories
         Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role);
 
         /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> DeleteUser(int userId);
+
+        /// <summary>
+        /// Изменение пароля пользователя
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> ChangePassword(ChangePasswordViewModel model );
+
+        /// <summary>
+        /// Изменение личного кабинета
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> ChangeProfile(UserEntityModel model);
+
+        /// <summary>
         /// Проверка существует пользователь 
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<bool> UserAlreadyExists(RegisterViewModel user);
+        Task<bool> UserAlreadyExists(string email);
 
         /// <summary>
         /// Аутентификация пользователя

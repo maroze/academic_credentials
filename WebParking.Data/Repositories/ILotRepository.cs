@@ -21,14 +21,7 @@ namespace WebParking.Data.Repositories
         /// Информация о всех парк. местах
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<LotEntityModel> GetLots();
-
-        /// <summary>
-        /// Бронирование парк. места
-        /// </summary>
-        /// <param name="lotId"></param>
-        /// <returns></returns>
-        //Task<LotEntityModel> BookLot(int lotId);
+        public IEnumerable<LotEntityModel> GetLots(int idpark);
 
         /// <summary>
         /// Обновление информации места парковки

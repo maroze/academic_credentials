@@ -56,6 +56,10 @@ namespace WebParking
 
             services.AddScoped<ILotRepository, LotRepository>();
             services.AddScoped<ILotService,LotService>();
+
+            services.AddScoped<IBookingLotRepository,BookingLotRepository>();
+            services.AddScoped<IBookingService, BookingService>();
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ParkingContext>();

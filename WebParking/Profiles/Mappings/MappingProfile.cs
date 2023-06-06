@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebParking.Common.ViewModels.Auth;
+using WebParking.Common.ViewModels.Booking;
 using WebParking.Common.ViewModels.LotParking;
 using WebParking.Common.ViewModels.Parking;
 using WebParking.Data.Entities;
@@ -22,13 +23,21 @@ namespace WebParking.Service.Mappings
             CreateMap<UserModel, ForgotPasswordViewModel>();
             CreateMap<UserModel, ResetPasswordViewModel>();
             CreateMap<UserModel, RegisterViewModel>();
-            CreateMap<UserViewModel, UserEntityModel>().ReverseMap();
+            CreateMap<UserViewModel, UserEntityModel>().ReverseMap(); 
+            CreateMap<UserEntityModel, ProfileUserViewModel>().ReverseMap();
 
             CreateMap<ParkingModel, ParkingViewModel>().ReverseMap();
             CreateMap<ParkingEntityModel, ParkingModel>().ReverseMap();
 
             CreateMap<LotModel, LotViewModel>().ReverseMap();
             CreateMap<LotEntityModel, LotModel>().ReverseMap();
+
+            CreateMap<UserLotEntityModel, BookModel>().ReverseMap();
+            CreateMap<UserLotEntityModel, BookingViewModel>().ReverseMap();
+            CreateMap<UserLotEntityModel, ChangeBookingViewModel>().ReverseMap();
+            CreateMap<BookModel, BookingViewModel>().ReverseMap();
+            CreateMap<BookModel, ChangeBookingViewModel>().ReverseMap();
+
         }
     }
 }

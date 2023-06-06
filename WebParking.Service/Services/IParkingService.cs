@@ -24,5 +24,26 @@ namespace WebParking.Service.Services
         /// <param name="park"></param>
         /// <returns></returns>
         Task<ParkingModel> AddParking(ParkingViewModel park);
+       
+        /// <summary>
+        /// Информация о всех парковках
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ParkingModel> GetParkins();
+
+        /// <summary>
+        /// Обновление информации парковки
+        /// </summary>
+        /// <param name="parking"></param>
+        /// <returns></returns>
+        Task<ParkingModel> UpdateParking(ParkingViewModel parking);
+
+        /// <summary>
+        /// Удаление парковки
+        /// </summary>
+        /// <param name="parkingId"></param>
+        /// <returns></returns>
+        Task<ParkingModel> DeleteParking(int parkingId);
+
     }
 }

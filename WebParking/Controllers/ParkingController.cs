@@ -15,6 +15,7 @@ namespace WebParking.Controllers
 {
     [Route("api/parkings")]
     [ApiController]
+    [Authorize]
     public class ParkingController : ControllerBase
     {
         private readonly IParkingService _parkService;
@@ -34,17 +35,16 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        [Authorize]
         [HttpGet]
-        [Route("lots/all")]
-        public IActionResult GetLots([FromRoute] LotViewModel lot)
+        [Route("lots/{parkId:int}/all")]
+        public IActionResult GetLots([FromRoute] int parkId)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
 
-                return Ok(_lotService.GetLots());
+                return Ok(_lotService.GetLots(parkId));
             }
             catch (Exception e)
             {
@@ -52,37 +52,7 @@ namespace WebParking.Controllers
             }
         }
 
-        /// <summary>
-        /// Получение id парк. места, название, пользователя
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        //[Authorize]
-        //[HttpPatch]
-        //[Route("lots/book/{lot:int}")]
-        //public async Task<IActionResult> BookLotAsync([FromBody] int lot)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //            return BadRequest("Invalid request data");
-        //        var result = await _lotService.BookLot(lot);
-        //        if (result == null)
-        //            return BadRequest("Lot unavailable for book");
-        //        return Ok();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
-
-        /// <summary>
-        /// Вывод адреса, места и времени парковки забронированной пользователем
-        /// </summary>
-        /// <param name="park"></param>
-        /// <returns></returns>
-        [Authorize]
+       
         [HttpGet]
         [Route("lots/{lot:int}")]
         public async Task<IActionResult> GetLotAsync([FromRoute] int lot)
@@ -115,7 +85,7 @@ namespace WebParking.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest("Invalid request data");
-                var result = await _lotService.AddLot(_mapper.Map<LotModel>(lot));
+                var result = await _lotService.AddLot(_mapper.Map<LotViewModel>(lot));
                 if (result == null)
                 {
                     return BadRequest("doesn't create");
@@ -127,7 +97,37 @@ namespace WebParking.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPut]
+        [Route("lots")]
+        public async Task<IActionResult> UpdateLotAsync([FromBody] LotUpdateViewModel lot)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+                var result = await _lotService.UpdateLot(lot);
+                if (result == null)
+                {
+                    return BadRequest("Parking doesn't update");
+                }
 
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("lots/{lotId:int}")]
+        public async Task<IActionResult> DeleteLotAsync([FromRoute] int lotId)
+        {
+            var delete = await _lotService.DeleteLot(lotId);
+            if (delete == null)
+                return BadRequest("Lot doesn't delete");
+            return Ok();
+        }
         /// <summary>
         /// Создание картинки, адреса и названия парковки
         /// </summary>
@@ -162,7 +162,7 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="parkId">парковка</param>
         /// <returns></returns>
-        [Authorize]
+        
         [HttpGet]
         [Route("parks/{parkId:int}")]
         public async Task<IActionResult> GetParkingAsync([FromRoute] int parkId)
@@ -183,6 +183,55 @@ namespace WebParking.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("parks/all")]
+        public async Task<IActionResult> GetParkingsAsync()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+
+                return Ok(_parkService.GetParkins());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("parks/{parkId:int}")]
+        public async Task<IActionResult> UpdateParkingAsync([FromBody] ParkingViewModel park)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+                var result = await _parkService.UpdateParking(park);
+                if (result == null)
+                {
+                    return BadRequest("Parking doesn't update");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("parks/{parkId:int}")]
+        public async Task<IActionResult> DeleteParkingAsync([FromRoute] int parkId)
+        {
+            var delete = await _parkService.DeleteParking(parkId);
+            if (delete == null)
+                return BadRequest("Parking doesn't delete");
+            return Ok();
         }
     }
 }

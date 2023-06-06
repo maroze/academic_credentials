@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,20 +13,53 @@ namespace WebParking.Data.Entities
     [Table("Users")]
     public class UserEntityModel
     {
-        //Id пользователя
+        /// <summary>
+        /// Id пользователя
+        /// </summary>
         [Key]
         [Column("user_id")]
         public int UserId { get; set; }
 
-        //Email(логин) пользователя
+        /// <summary>
+        /// Email(логин) пользователя
+        /// </summary>
         [Column("username")]
         public string Email { get; set; }
 
-        //Пароль пользователя
+        /// <summary>
+        /// Пароль пользователя
+        /// </summary>
         [Column("password")]
         public string Password { get; set; }
 
-        //Роль (Админ, Менеджер, Пользователь)
+        /// <summary>
+        /// Роль (Админ, Менеджер, Пользователь)
+        /// </summary>
         public IdentityRole Role { get; set; }
+
+        /// <summary>
+        /// Фото пользователя
+        /// </summary>
+        public byte[]? Avatar { get; set; }
+
+        /// <summary>
+        /// Имя пользователя
+        /// </summary>
+        public string? FirstName { get; set; }
+
+        /// <summary>
+        /// Фамилия пользователя
+        /// </summary>
+        public string? LastName { get; set; }
+
+        /// <summary>
+        /// Номер пользователя
+        /// </summary>
+        public string? PhoneNumber { get; set; }
+
+        /// <summary>
+        /// Номер машины
+        /// </summary>
+        public string? PlateNumder { get; set; }
     }
 }

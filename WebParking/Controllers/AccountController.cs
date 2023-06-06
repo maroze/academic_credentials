@@ -17,6 +17,7 @@ namespace WebParking.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -51,6 +52,40 @@ namespace WebParking.Controllers
                 if (loguser != null)
                 {
                     return Ok(loguser);
+                }
+
+                else
+                    return BadRequest("User doesn't exist");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Информация о пользователе 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("users/profiles")]
+        public async Task<IActionResult> ProfileUserAsync([FromForm] ProfileUserViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+                if (await _accountService.UserAlreadyExists(model.Email))
+                    return BadRequest("User already exists, please try something else");
+
+                var loguser = await _accountService.ChangeProfile(model);
+
+                if (loguser != null)
+                {
+                    return Ok(await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)));
                 }
 
                 else
@@ -142,7 +177,7 @@ namespace WebParking.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
 
-            if (await _accountService.UserAlreadyExists(model))
+            if (await _accountService.UserAlreadyExists(model.Email))
                 return BadRequest("User already exists, please try something else");
 
             if (!ModelState.IsValid)
@@ -159,7 +194,7 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [Authorize]
+        
         [HttpHead("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -169,9 +204,8 @@ namespace WebParking.Controllers
         }
 
         [HttpPatch]
-        [AllowAnonymous]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel resetPassword)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel resetPassword)
         {
             try
             {
@@ -190,7 +224,37 @@ namespace WebParking.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPatch]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel pass)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest("Invalid request data");
+                var user = await _accountService.ChangePassword(pass);
+                if (user != null)
+                {
+                    return Ok();
+                }
+                else
+                    return BadRequest("Password doesn't match");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteUser([FromBody] int Id)
+        {
+            var user = await _accountService.DeleteUser(Id);
+            if (user == null)
+                return BadRequest("Account doesn't delete");
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
+        }
     }
 }
 
