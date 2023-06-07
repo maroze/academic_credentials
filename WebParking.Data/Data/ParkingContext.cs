@@ -26,7 +26,7 @@ namespace WebParking.Data.Data
         {
             modelBuilder.Entity<LotEntityModel>()
             .HasOne(p => p.Parks)
-            .WithMany(t => t.Lots)
+            .WithMany(p => p.Lots)
             .HasForeignKey(p => p.IdParks);
 
             modelBuilder.Entity<UserLotEntityModel>()

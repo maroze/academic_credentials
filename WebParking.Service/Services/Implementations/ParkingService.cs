@@ -19,7 +19,7 @@ namespace WebParking.Service.Services.Implementations
         private readonly IMapper _mapper;
         public ParkingService(IParkingRepository parkRepository, IMapper mapper)
         {
-            _parkRepository=parkRepository;
+            _parkRepository = parkRepository;
             _mapper = mapper;
         }
         public async Task<ParkingModel> AddParking(ParkingViewModel park)
@@ -71,6 +71,19 @@ namespace WebParking.Service.Services.Implementations
             var res = await _parkRepository.GetParking(parking.ParkId);
             if (res == null)
                 throw new Exception("Парковки не существует");
+            if (parking.Image != null)
+            {
+                byte[] imageData = null;
+                using (var binaryReader = new BinaryReader(parking.Image.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)parking.Image.Length);
+                }
+                res.Image = imageData;
+                res.Adress = parking.Adress;
+                res.Name = parking.Name;
+                return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
+            }
+
             res = _mapper.Map<ParkingEntityModel>(parking);
             return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
         }

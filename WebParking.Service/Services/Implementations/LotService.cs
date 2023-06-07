@@ -31,8 +31,10 @@ namespace WebParking.Service.Services.Implementations
         {
              if (lot == null)
                 throw new Exception("Парк место не указано");
-             if (await _parkRepository.GetParking(lot.ParkId) == null)
+             if (await _parkRepository.GetParking(lot.IdParks) == null)
                 throw new Exception("Парковки не существует");
+             if(await _lotRepository.GetLot(lot.LotId) != null)
+                throw new Exception("Парковочное место с таким id уже существует");
 
             return _mapper.Map<LotModel>(await _lotRepository.AddLot(_mapper.Map<LotEntityModel>(lot)));
         }
@@ -66,7 +68,10 @@ namespace WebParking.Service.Services.Implementations
             var res = await _lotRepository.GetLot(lot.LotId); 
             if (res == null)
                 throw new Exception("Место не существует");
-            res = _mapper.Map <LotEntityModel > (lot);
+          
+            res.IsBlocked = lot.IsBlocked;
+            res.IsBooked = lot.IsBooked;
+            res.Name = lot.Name;
             return _mapper.Map<LotModel>(await _lotRepository.UpdateLot(res));
         }
     }

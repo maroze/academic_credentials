@@ -15,6 +15,7 @@ namespace WebParking.Data.Entities
         /// Id парковочного места
         /// </summary>
         [Key]
+      
         [Column("lot_id")]
         public int LotId { get; set; }
 /// <summary>

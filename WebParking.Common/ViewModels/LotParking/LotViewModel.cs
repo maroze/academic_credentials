@@ -11,14 +11,14 @@ namespace WebParking.Common.ViewModels.LotParking
     public class LotViewModel
     {
         public int LotId { get; set; }
-        public int ParkId { get; set; }
+        public int IdParks { get; set; }
         //Название парк. места
         public string? Name { get; set; }
        
         //Состояние парк. места доступно/недоступно для бронирования
-        public bool? IsBlocked { get; set; }
+        public bool IsBlocked { get; set; }
         
         //Состояние парк. места забронировано/свободно
-        public bool? IsBooked { get; set; }
+        public bool IsBooked { get; set; }
     }
 }

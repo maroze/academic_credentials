@@ -56,7 +56,7 @@ namespace WebParking.Controllers
 
         [HttpPut]
         [Route("book")]
-        public async Task<IActionResult> UpdateBookAsync([FromRoute] ChangeBookingViewModel book)
+        public async Task<IActionResult> UpdateBookAsync([FromForm] ChangeBookingViewModel book)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace WebParking.Controllers
         }
 
         [HttpDelete]
-        [Route("book")]
+        [Route("book/{book:int}")]
         public async Task<IActionResult> DeleteBookAsync([FromRoute] int book)
         {
             var delete = await _bookingService.DeleteBook(book);

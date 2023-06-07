@@ -38,7 +38,7 @@ namespace WebParking.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityRole");
+                    b.ToTable("IdentityRole", (string)null);
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.LotEntityModel", b =>
@@ -71,7 +71,7 @@ namespace WebParking.Data.Migrations
 
                     b.HasIndex("IdParks");
 
-                    b.ToTable("Lots");
+                    b.ToTable("Lots", (string)null);
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.ParkingEntityModel", b =>
@@ -98,7 +98,7 @@ namespace WebParking.Data.Migrations
 
                     b.HasKey("ParkId");
 
-                    b.ToTable("Parkings");
+                    b.ToTable("Parkings", (string)null);
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.UserEntityModel", b =>
@@ -142,7 +142,7 @@ namespace WebParking.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.UserLotEntityModel", b =>
@@ -179,7 +179,7 @@ namespace WebParking.Data.Migrations
 
                     b.HasIndex("IdUsers");
 
-                    b.ToTable("UserLots");
+                    b.ToTable("UserLots", (string)null);
                 });
 
             modelBuilder.Entity("WebParking.Data.Entities.LotEntityModel", b =>
