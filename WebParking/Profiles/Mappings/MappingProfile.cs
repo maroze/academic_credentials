@@ -29,6 +29,7 @@ namespace WebParking.Service.Mappings
 
             CreateMap<ParkingModel, ParkingViewModel>().ReverseMap();
             CreateMap<ParkingEntityModel, ParkingModel>().ReverseMap();
+            CreateMap<ParkingEntityModel, ParkingUpdateViewModel>().ReverseMap();
 
             CreateMap<LotModel, LotViewModel>().ReverseMap();
             CreateMap<LotEntityModel, LotModel>().ReverseMap();

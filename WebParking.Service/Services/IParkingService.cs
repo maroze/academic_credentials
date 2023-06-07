@@ -36,7 +36,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="parking"></param>
         /// <returns></returns>
-        Task<ParkingModel> UpdateParking(ParkingViewModel parking);
+        Task<ParkingModel> UpdateParking(ParkingUpdateViewModel parking);
 
         /// <summary>
         /// Удаление парковки

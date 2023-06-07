@@ -1,21 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WebParking.Common.ViewModels.Parking
 {
-    /// <summary>
-    /// Модель представления создания парковки
-    /// </summary>
-    public class ParkingViewModel
+    public class ParkingUpdateViewModel
     {
-        public int ParkId { get;set; }
+        public int ParkId { get; set; }
         //Изображение парковки
-        
+
         public IFormFile? Image { get; set; }
 
         //Название парковки
@@ -23,9 +19,5 @@ namespace WebParking.Common.ViewModels.Parking
 
         //Адрес парковки
         public string? Adress { get; set; }
-
-        public int? Row { get; set; }
-        public int? Column { get; set; }
-
     }
 }

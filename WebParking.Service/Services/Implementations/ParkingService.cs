@@ -27,7 +27,7 @@ namespace WebParking.Service.Services.Implementations
             if (park == null)
                 throw new Exception("Парковка не указана");
 
-            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name };
+            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name, Column = park.Column, Row = park.Row};
             byte[] imageData = null;
             using (var binaryReader = new BinaryReader(park.Image.OpenReadStream()))
             {
@@ -66,7 +66,7 @@ namespace WebParking.Service.Services.Implementations
             return _mapper.Map<IEnumerable<ParkingModel>>(park_list);
         }
 
-        public async Task<ParkingModel> UpdateParking(ParkingViewModel parking)
+        public async Task<ParkingModel> UpdateParking(ParkingUpdateViewModel parking)
         {
             var res = await _parkRepository.GetParking(parking.ParkId);
             if (res == null)

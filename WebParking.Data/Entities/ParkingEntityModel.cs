@@ -29,7 +29,10 @@ namespace WebParking.Data.Entities
         /// </summary>
         [Column("name")]
         public string? Name { get; set; }
-
+        [Column("row")]
+        public int? Row { get; set; }
+        [Column("column")]
+        public int? Column { get; set; }
         /// <summary>
         /// Адрес парковки
         /// </summary>

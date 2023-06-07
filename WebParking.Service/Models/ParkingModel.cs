@@ -18,6 +18,8 @@ namespace WebParking.Service.Models
         public string? Name { get; set; }
 
         //Адрес парковки
-        public string Adress { get; set; }
+        public string? Adress { get; set; }
+        public int? Row { get; set; }
+        public int? Column { get; set; }
     }
 }

@@ -205,7 +205,7 @@ namespace WebParking.Controllers
 
         [HttpPut]
         [Route("parks/{parkId:int}")]
-        public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingViewModel park)
+        public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingUpdateViewModel park)
         {
             try
             {
