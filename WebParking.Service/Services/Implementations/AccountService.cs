@@ -68,6 +68,8 @@ namespace WebParking.Service.Services.Implementations
 
             if (user == null)
                 throw new Exception("Пользователя с таким Id не существует");
+            if (model.Avatar == null)
+                throw new Exception("Пользователь без фото");
 
             byte[] imageData = null;
             using (var binaryReader = new BinaryReader(model.Avatar.OpenReadStream()))

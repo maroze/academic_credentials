@@ -8,7 +8,7 @@ namespace WebParking.Controllers
 {
     [Route("api/booking")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [AllowAnonymous]
     public class BookingController : ControllerBase
     {
@@ -47,25 +47,6 @@ namespace WebParking.Controllers
                 await _bookingService.AddBook(book);
 
                 return StatusCode(201);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpPut]
-        [Route("book")]
-        public async Task<IActionResult> UpdateBookAsync([FromForm] ChangeBookingViewModel book)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var update = await _bookingService.UpdateBook(book);
-                if (update == null)
-                    return BadRequest("Book doesn't update");
-                return Ok(book);
             }
             catch (Exception e)
             {

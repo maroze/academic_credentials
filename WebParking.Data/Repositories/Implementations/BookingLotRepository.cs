@@ -39,5 +39,10 @@ namespace WebParking.Data.Repositories.Implementations
         {
             return await GetQuery().FirstOrDefaultAsync(b=> b.UserLotId==id);
         }
+
+        public IEnumerable<UserLotEntityModel> GetBooks()
+        {
+            return GetAll().ToList();
+        }
     }
 }

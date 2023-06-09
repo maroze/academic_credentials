@@ -57,6 +57,12 @@ namespace WebParking.Service.Services.Implementations
             return _mapper.Map<BookModel>(await _bookRepository.DeleteBook(lotId));
         }
 
+        public IEnumerable<BookModel> GetBooks()
+        {
+            var book_list = _bookRepository.GetBooks();
+            return _mapper.Map<IEnumerable<BookModel>>(book_list);
+        }
+
         public IEnumerable<BookModel> GetUserBooks(int userId)
         {
             var book_list = _bookRepository.GetUserBooks(userId);

@@ -16,7 +16,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BookModel> GetUserBooks(int userId);
-
+        public IEnumerable<BookModel> GetBooks();
         /// <summary>
         /// Изменение бронирования
         /// </summary>

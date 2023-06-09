@@ -15,7 +15,7 @@ namespace WebParking.Controllers
 {
     [Route("api/parkings")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [AllowAnonymous]
     public class ParkingController : ControllerBase
     {
