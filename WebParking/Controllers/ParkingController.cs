@@ -77,7 +77,7 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("lots")]
         public async Task<IActionResult> CreateLotAsync([FromBody] LotViewModel lot)
@@ -100,6 +100,7 @@ namespace WebParking.Controllers
         }
         [HttpPut]
         [Route("lots")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UpdateLotAsync([FromBody] LotUpdateViewModel lot)
         {
             try
@@ -122,6 +123,7 @@ namespace WebParking.Controllers
 
         [HttpDelete]
         [Route("lots/{lotId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteLotAsync([FromRoute] int lotId)
         {
             var delete = await _lotService.DeleteLot(lotId);
@@ -205,6 +207,7 @@ namespace WebParking.Controllers
 
         [HttpPut]
         [Route("parks/{parkId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingUpdateViewModel park)
         {
             try
@@ -227,6 +230,7 @@ namespace WebParking.Controllers
 
         [HttpDelete]
         [Route("parks/{parkId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteParkingAsync([FromRoute] int parkId)
         {
             var delete = await _parkService.DeleteParking(parkId);
