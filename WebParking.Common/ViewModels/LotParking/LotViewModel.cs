@@ -10,7 +10,6 @@ namespace WebParking.Common.ViewModels.LotParking
 {
     public class LotViewModel
     {
-        public int LotId { get; set; }
         public int IdParks { get; set; }
         //Название парк. места
         public string? Name { get; set; }

@@ -33,6 +33,9 @@ namespace WebParking.Data.Repositories.Implementations
         public async Task<UserEntityModel> ChangePassword(ChangePasswordViewModel model)
         {
             var result = await GetQuery().FirstOrDefaultAsync(x => x.Email == model.Email && x.Password == model.OldPassword);
+            if (result == null)
+                return null;
+
             result.Password = model.NewPassword;
             return await UpdateAsync(result);
         }
@@ -42,9 +45,9 @@ namespace WebParking.Data.Repositories.Implementations
             return await UpdateAsync(model);
         }
 
-        public async Task<UserEntityModel> DeleteUser(int userId)
+        public async Task<UserEntityModel> DeleteUser(string email)
         {
-            var result = await GetQuery().FirstOrDefaultAsync(u => u.UserId == userId);
+            var result = await GetQuery().FirstOrDefaultAsync(u => u.Email == email);
             return await DeleteAsync(result);
         }
 
@@ -53,9 +56,13 @@ namespace WebParking.Data.Repositories.Implementations
             return await GetQuery().FirstOrDefaultAsync(e => e.Email == model.Email);
         }
 
+        public async Task<UserEntityModel> GetByEmail(string email)
+        {
+            return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(u => u.Email == email);
+        }
         public async Task<UserEntityModel> GetById(int id)
         {
-            return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(u => u.UserId == id);
+            return await GetQuery().Include(r => r.Role).FirstOrDefaultAsync(u => u.UserId== id);
         }
 
         public async Task<UserEntityModel> Register(RegisterViewModel user, IdentityRole role)

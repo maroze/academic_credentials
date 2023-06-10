@@ -12,6 +12,7 @@ namespace WebParking.Service.Models
 {
     public class ParkingModel
     {
+        public int ParkId { get; set; }
         public byte[] Image { get; set; }
 
         //Название парковки

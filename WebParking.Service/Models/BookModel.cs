@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace WebParking.Service.Models
 {
     public class BookModel
-    { 
+    {
+        public int UserLotId { get; set; }
         //Время начала бронирования парк. места
         public DateTime? StartBookedTime { get; set; }
 

@@ -26,15 +26,11 @@ namespace WebParking.Data.Repositories.Implementations
             return await DeleteAsync(result);
         }
 
-        public IEnumerable<UserLotEntityModel> GetUserBooks(int userId)
+        public IEnumerable<UserLotEntityModel> GetUserBooks(int id)
         {
-            return  GetAll().Where(u => u.IdUsers == userId).ToList();
+            return GetAll().Where(l =>l.IdUsers == id).ToList();
         }
 
-        public async Task<UserLotEntityModel> UpdateBook(UserLotEntityModel lot)
-        {
-            return await UpdateAsync(lot);
-        }
         public async Task<UserLotEntityModel> GetBook(int id)
         {
             return await GetQuery().FirstOrDefaultAsync(b=> b.UserLotId==id);

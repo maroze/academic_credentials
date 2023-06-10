@@ -12,13 +12,14 @@ using WebParking.Service.Services.Implementations;
 using WebParking.Services.EmailServices;
 using WebParking.Common.ViewModels.Auth;
 using AutoMapper;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace WebParking.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
     [Authorize]
-    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -39,64 +40,48 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("users/{id:int}")]
-        public async Task<IActionResult> GetUserAsync([FromRoute] int id)
+        [HttpGet()]
+        public async Task<IActionResult> GetUserAsync()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                var loguser = await _accountService.GetUserById(id);
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            //Decode from base64 string
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            //convert json to key value pair
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
 
-                if (loguser != null)
-                {
-                    return Ok(loguser);
-                }
+            var loguser = await _accountService.GetUserByEmail(values["email"]);
 
-                else
-                    return BadRequest("User doesn't exist");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
+            return Ok(loguser);
         }
-
-
+       
         /// <summary>
         /// Информация о пользователе 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPut]
-        [Route("users/profiles")]
+        [HttpPut("profiles")]
         public async Task<IActionResult> ProfileUserAsync([FromForm] ProfileUserViewModel model)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                if (await _accountService.UserAlreadyExists(model.Email))
-                    return BadRequest("User already exists, please try something else");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                var loguser = await _accountService.ChangeProfile(model);
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
 
-                if (loguser != null)
-                {
-                    return Ok(await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)));
-                }
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
 
-                else
-                    return BadRequest("User doesn't exist");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
 
+            var loguser = await _accountService.ChangeProfile(model, values["email"]);
+
+            if (loguser == null)
+                return BadRequest("Не удалось сохранить изменения");
+
+            return Ok(await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)));
         }
 
         /// <summary>
@@ -105,31 +90,19 @@ namespace WebParking.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost]
-        [Route("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginViewModel user)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                var loguser = await _accountService.Authenticate(user);
+            var loguser = await _accountService.Authenticate(user);
 
-                if (loguser != null)
-                {
-                    UserRoleViewModel model = new UserRoleViewModel() { Role = loguser.Role, Token = await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)) };
+            if (loguser == null)
+                return BadRequest("Неправильный пароль или логин");
 
-                    return Ok(model);
-                }
-
-                else
-                    return BadRequest("Wrong password or login");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            UserRoleViewModel model = new UserRoleViewModel() { Role = loguser.Role, Token = await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(loguser)) };
+            return Ok(model);
         }
 
         /// <summary>
@@ -138,33 +111,20 @@ namespace WebParking.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost]
-        [Route("forgot-password")]
+        [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotAsync([FromBody] ForgotPasswordViewModel user)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var u = await _accountService.ForgotPassword(user);
-                if (u != null)
-                {
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+            
+            var u = await _accountService.ForgotPassword(user);
 
-                    var token = _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(u));
+            var token = await _tokenService.GenerateSecurityTokenAsync(_mapper.Map<UserEntityModel>(u));
+            var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
+            var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
 
-                    var callback = Url.Action("ConfirmEmail", "Account", new { token, email = user.Email }, Request.Scheme);
-                    var message = new Message(new string[] { user.Email }, "Reset password token", "Восстановление пароля для личного кабинета SKYPARKING\r\nВы запросили восстановление пароля.\r\nЧтобы задать новый пароль, перейдите по этой ссылке.\r\n" + callback);
-
-                    _emailSender.SendEmail(message);
-                    return Ok();
-                }
-                else
-                    return BadRequest("User doesn't exist");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            _emailSender.SendEmail(message);
+            return Ok();
         }
 
         /// <summary>
@@ -173,20 +133,16 @@ namespace WebParking.Controllers
         /// <param name="model">логин, пароль, повторить пароль</param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpPost]
-        [Route("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
             if (await _accountService.UserAlreadyExists(model.Email))
-                return BadRequest("User already exists, please try something else");
-
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid request data");
-
+                return BadRequest("Пользователь с такой почтой уже существует");
 
             await _accountService.Register(model);
-
             return StatusCode(201);
         }
 
@@ -195,7 +151,6 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        
         [HttpHead("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -204,55 +159,67 @@ namespace WebParking.Controllers
             return Redirect("/");
         }
 
-        [HttpPatch]
-        [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel resetPassword)
+        [HttpPatch("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] RequestResetPasswordViewModel pass)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var user = await _accountService.ResetPassword(resetPassword);
-                if (user != null)
-                {
-                    return Ok();
-                }
-                else
-                    return BadRequest("Password doesn't change");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-        [HttpPatch]
-        [Route("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel pass)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var user = await _accountService.ChangePassword(pass);
-                if (user != null)
-                {
-                    return Ok();
-                }
-                else
-                    return BadRequest("Password doesn't match");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+
+            ResetPasswordViewModel model = new ResetPasswordViewModel() { Email = values["email"], NewPassword = pass.NewPassword, NewConfirmPassword = pass.NewConfirmPassword };
+
+            var user = await _accountService.ResetPassword(model);
+
+            if (user == null)
+                return BadRequest("Неудалось изменить пароль");
+
+            return Ok();
         }
 
-        [HttpDelete()]
-        public async Task<IActionResult> DeleteUser([FromBody] int Id)
+        [HttpPatch("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] RequestChangePasswordViewModel pass)
         {
-            var user = await _accountService.DeleteUser(Id);
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            //Decode from base64 string
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            //convert json to key value pair
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+
+            ChangePasswordViewModel model = new ChangePasswordViewModel() { Email = values["email"], OldPassword = pass.OldPassword, NewPassword = pass.NewPassword, ConfirmPassword = pass.ConfirmPassword };
+            var user = await _accountService.ChangePassword(model);
+
             if (user == null)
-                return BadRequest("Account doesn't delete");
+                return BadRequest("Неудалось изменить пароль");
+
+            return Ok();
+        }
+
+        [HttpDelete("users")]
+        public async Task<IActionResult> DeleteUser()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            //Decode from base64 string
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            //convert json to key value pair
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+
+            var user = await _accountService.DeleteUser(values["email"]);
+
+            if (user == null)
+                return BadRequest("Не удалось удалить аккаунт");
+
             await HttpContext.SignOutAsync();
             return Redirect("/");
         }

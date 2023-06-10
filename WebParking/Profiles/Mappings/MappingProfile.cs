@@ -26,6 +26,7 @@ namespace WebParking.Service.Mappings
             CreateMap<UserModel, RegisterViewModel>();
             CreateMap<UserViewModel, UserEntityModel>().ReverseMap(); 
             CreateMap<UserEntityModel, ProfileUserViewModel>().ReverseMap();
+            CreateMap<UserEntityModel, ResponseProfileUserViewModel>().ReverseMap();
 
             CreateMap<ParkingModel, ParkingViewModel>().ReverseMap();
             CreateMap<ParkingEntityModel, ParkingModel>().ReverseMap();
@@ -38,9 +39,9 @@ namespace WebParking.Service.Mappings
 
             CreateMap<UserLotEntityModel, BookModel>().ReverseMap();
             CreateMap<UserLotEntityModel, BookingViewModel>().ReverseMap();
-            CreateMap<UserLotEntityModel, ChangeBookingViewModel>().ReverseMap();
+           
             CreateMap<BookModel, BookingViewModel>().ReverseMap();
-            CreateMap<BookModel, ChangeBookingViewModel>().ReverseMap();
+            
 
         }
     }

@@ -19,7 +19,6 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<LotEntityModel> AddLot(LotEntityModel lot)
         {
-            GetQuery().Include(l => l.Parks.ParkId);
             return await InsertAsync(lot);
         }
 

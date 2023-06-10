@@ -13,16 +13,9 @@ namespace WebParking.Data.Repositories
         /// Информация о всех забронированных местах пользователя
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<UserLotEntityModel> GetUserBooks(int userId);
+        public IEnumerable<UserLotEntityModel> GetUserBooks(int id);
 
         public IEnumerable<UserLotEntityModel> GetBooks();
-
-        /// <summary>
-        /// Изменение бронирования
-        /// </summary>
-        /// <param name="lot"></param>
-        /// <returns></returns>
-        Task<UserLotEntityModel> UpdateBook(UserLotEntityModel lot);
 
         /// <summary>
         /// Удаление брони

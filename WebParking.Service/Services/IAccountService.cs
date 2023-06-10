@@ -53,14 +53,14 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<ProfileUserViewModel> GetUserById(int id);
+        Task<ResponseProfileUserViewModel> GetUserByEmail(string email);
 
         /// <summary>
         /// Удаление пользователя
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<UserModel> DeleteUser(int userId);
+        Task<UserModel> DeleteUser(string email);
 
         /// <summary>
         /// Изменение пароля пользователя
@@ -74,7 +74,7 @@ namespace WebParking.Service.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task<UserModel> ChangeProfile(ProfileUserViewModel model);
+        Task<UserModel> ChangeProfile(ProfileUserViewModel model, string email);
 
     }
 }

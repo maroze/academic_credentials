@@ -15,14 +15,8 @@ namespace WebParking.Service.Services
         /// Информация о всех забронированных местах пользователя
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<BookModel> GetUserBooks(int userId);
+        public IEnumerable<BookModel> GetUserBooks(int id);
         public IEnumerable<BookModel> GetBooks();
-        /// <summary>
-        /// Изменение бронирования
-        /// </summary>
-        /// <param name="lot"></param>
-        /// <returns></returns>
-        Task<BookModel> UpdateBook(ChangeBookingViewModel lot);
 
         /// <summary>
         /// Удаление брони

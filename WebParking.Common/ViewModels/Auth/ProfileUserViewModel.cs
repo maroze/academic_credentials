@@ -9,7 +9,6 @@ namespace WebParking.Common.ViewModels.Auth
 {
     public class ProfileUserViewModel
     {
-        public int UserId { get; set; }
         public IFormFile? Avatar { get; set; }
         public string? Email { get; set;}
         public string? FirstName { get; set;}

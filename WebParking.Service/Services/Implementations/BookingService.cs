@@ -30,10 +30,13 @@ namespace WebParking.Service.Services.Implementations
         {
             if (lot == null)
                 throw new Exception("Парк место не указано");
+
             var res = await _lotRepository.GetLot(lot.IdLots);
             var user = await _userRepository.GetById(lot.IdUsers);
+
             if ((res == null) || (user == null))
                 throw new Exception("Парк место или/и пользователь не найден");
+
             if (res.IsBooked || res.IsBlocked)
                 throw new Exception("Парк место недоступно для бронирования");
 
@@ -44,10 +47,8 @@ namespace WebParking.Service.Services.Implementations
 
         public async Task<BookModel> DeleteBook(int lotId)
         {
-
-            if (lotId == null)
-                throw new Exception("Id брони не указано");
             var get = await _bookRepository.GetBook(lotId);
+
             if (get == null)
                 throw new Exception("Такой брони нет");
 
@@ -63,20 +64,11 @@ namespace WebParking.Service.Services.Implementations
             return _mapper.Map<IEnumerable<BookModel>>(book_list);
         }
 
-        public IEnumerable<BookModel> GetUserBooks(int userId)
+        public IEnumerable<BookModel> GetUserBooks(int id)
         {
-            var book_list = _bookRepository.GetUserBooks(userId);
+            var book_list = _bookRepository.GetUserBooks(id);
             return _mapper.Map<IEnumerable<BookModel>>(book_list);
         }
 
-        public async Task<BookModel> UpdateBook(ChangeBookingViewModel time)
-        {
-            var book = await _bookRepository.GetBook(time.UserLotId);
-            if ((book == null) || book.IsExpired)
-                throw new Exception("Брони не существует");
-            book = _mapper.Map<UserLotEntityModel>(time);
-
-            return _mapper.Map<BookModel>(await _bookRepository.UpdateBook(book));
-        }
     }
 }

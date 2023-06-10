@@ -16,7 +16,6 @@ namespace WebParking.Controllers
     [Route("api/parkings")]
     [ApiController]
     [Authorize]
-    [AllowAnonymous]
     public class ParkingController : ControllerBase
     {
         private readonly IParkingService _parkService;
@@ -30,105 +29,74 @@ namespace WebParking.Controllers
             _mapper = mapper;
         }
 
-
         /// <summary>
         /// Получение всех id парк. мест и их состояние(заблокированны)
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("lots/{parkId:int}/all")]
-        public IActionResult GetLots([FromRoute] int parkId)
+        [HttpGet("lots/{id:int}/park")]
+        public IActionResult GetLots([FromRoute] int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                return Ok(_lotService.GetLots(parkId));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(_lotService.GetLots(id));
         }
 
-       
-        [HttpGet]
-        [Route("lots/{lot:int}")]
-        public async Task<IActionResult> GetLotAsync([FromRoute] int lot)
+        [HttpGet("lots/{id:int}")]
+        public async Task<IActionResult> GetLotAsync([FromRoute] int id)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _lotService.GetLot(lot);
-                if (result == null)
-                    return BadRequest("Lot doesn't exists");
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            var result = await _lotService.GetLot(id);
+
+            return Ok(result);
         }
         /// <summary>
         /// Создание парк места
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [Route("lots")]
+        [Authorize(Roles = "admin")]
+        [HttpPost("lots")]
         public async Task<IActionResult> CreateLotAsync([FromBody] LotViewModel lot)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _lotService.AddLot(_mapper.Map<LotViewModel>(lot));
-                if (result == null)
-                {
-                    return BadRequest("doesn't create");
-                }
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            var result = await _lotService.AddLot(_mapper.Map<LotViewModel>(lot));
+
+            if (result == null)
+                return BadRequest("Не удалось создать парковочное место");
+
+            return StatusCode(201);
         }
-        [HttpPut]
-        [Route("lots")]
-        [Authorize(Roles = "Admin, Manager")]
+
+        [HttpPut("lots")]
+        [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> UpdateLotAsync([FromBody] LotUpdateViewModel lot)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _lotService.UpdateLot(lot);
-                if (result == null)
-                {
-                    return BadRequest("Parking doesn't update");
-                }
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var result = await _lotService.UpdateLot(lot);
+
+            if (result == null)
+                return BadRequest("Не удалось сохранить изменения");
+
+            return Ok(result);
         }
 
-        [HttpDelete]
-        [Route("lots/{lotId:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteLotAsync([FromRoute] int lotId)
+        [HttpDelete("lots/{id:int}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteLotAsync([FromRoute] int id)
         {
-            var delete = await _lotService.DeleteLot(lotId);
+            var delete = await _lotService.DeleteLot(id);
+
             if (delete == null)
-                return BadRequest("Lot doesn't delete");
+                return BadRequest("Не удалось удалить парковочное место");
+
             return Ok();
         }
         /// <summary>
@@ -136,106 +104,74 @@ namespace WebParking.Controllers
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        [Route("parks")]
+        [Authorize(Roles = "admin")]
+        [HttpPost("parks")]
         public async Task<IActionResult> CreateParkingAsync([FromForm] ParkingViewModel park)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                var result = await _parkService.AddParking(park);
-                if (result == null)
-                {
-                    return BadRequest("Parking doesn't create");
-                }
-                return Ok();
+            var result = await _parkService.AddParking(park);
 
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (result == null)
+                return BadRequest("Не удалось создать парковку");
+
+            return StatusCode(201);
         }
 
         /// <summary>
         /// Информация о названии и адресе парковки и картинка парковки
         /// </summary>
-        /// <param name="parkId">парковка</param>
+        /// <param name="id">парковка</param>
         /// <returns></returns>
-        
-        [HttpGet]
-        [Route("parks/{parkId:int}")]
-        public async Task<IActionResult> GetParkingAsync([FromRoute] int parkId)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _parkService.GetParking(parkId);
-                if (result == null)
-                {
-                    return BadRequest("Parking doesn't exists");
-                }
 
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+        [HttpGet("parks/{id:int}")]
+        public async Task<IActionResult> GetParkingAsync([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            var result = await _parkService.GetParking(id);
+
+            return Ok(result);
         }
 
-        [HttpGet]
-        [Route("parks/all")]
+        [HttpGet("parks/all")]
         public async Task<IActionResult> GetParkingsAsync()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                return Ok(_parkService.GetParkins());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(_parkService.GetParkins());
         }
 
-        [HttpPut]
-        [Route("parks/{parkId:int}")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("parks")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingUpdateViewModel park)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                var result = await _parkService.UpdateParking(park);
-                if (result == null)
-                {
-                    return BadRequest("Parking doesn't update");
-                }
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var result = await _parkService.UpdateParking(park);
+
+            if (result == null)
+                return BadRequest("Не удалось сохранить изменения");
+
+            return Ok(result);
         }
 
-        [HttpDelete]
-        [Route("parks/{parkId:int}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteParkingAsync([FromRoute] int parkId)
+        [HttpDelete("parks/{id:int}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteParkingAsync([FromRoute] int id)
         {
-            var delete = await _parkService.DeleteParking(parkId);
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            var delete = await _parkService.DeleteParking(id);
+
             if (delete == null)
-                return BadRequest("Parking doesn't delete");
+                return BadRequest("Не удалось удалить парковку");
+
             return Ok();
         }
     }

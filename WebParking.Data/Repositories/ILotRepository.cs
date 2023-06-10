@@ -43,5 +43,6 @@ namespace WebParking.Data.Repositories
         /// <param name="lot"></param>
         /// <returns></returns>
         Task<LotEntityModel> AddLot(LotEntityModel lot);
+
     }
 }

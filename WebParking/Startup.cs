@@ -19,6 +19,7 @@ using AutoMapper;
 using WebParking.Service.Mappings;
 using WebParking.Background;
 using Microsoft.OpenApi.Models;
+using WebParking.Middleware;
 
 namespace WebParking
 {
@@ -98,14 +99,14 @@ namespace WebParking
             services.AddControllersWithViews();
             services.AddSwaggerGen(swagger =>
             {
-                //This is to generate the Default UI of Swagger Documentation
+
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "JWT Token Authentication API",
                     Description = "ASP.NET Core 5.0 Web API"
                 });
-                // To Enable authorization using Swagger (JWT)
+
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -147,6 +148,8 @@ namespace WebParking
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseExceptionHandlerMiddleware();
 
             app.UseRouting();
 

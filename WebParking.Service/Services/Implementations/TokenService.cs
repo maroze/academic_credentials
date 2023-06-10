@@ -42,7 +42,9 @@ namespace WebParking.Service.Services.Implementations
                 new Claim(ClaimTypes.Role,  result.Role.Name),
             }),
                 Expires = DateTime.UtcNow.AddMinutes(double.Parse(myexpDate)),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature), 
+                Audience = "localhost",
+                Issuer= "localhost"
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Web.Helpers;
+using System.Web.WebPages;
 using WebParking.Common;
 using WebParking.Common.ViewModels.Auth;
 using WebParking.Data.Entities;
@@ -55,50 +56,48 @@ namespace WebParking.Service.Services.Implementations
             model.OldPassword = _passwordEncryption.HashPassword(model.OldPassword);
             model.NewPassword = _passwordEncryption.HashPassword(model.NewPassword);
             model.ConfirmPassword = _passwordEncryption.HashPassword(model.ConfirmPassword);
-           
+
             return _mapper.Map<UserModel>(await _userRepository.ChangePassword(model));
         }
         //Почему не работает
-        public async Task<UserModel> ChangeProfile(ProfileUserViewModel model)
+        public async Task<UserModel> ChangeProfile(ProfileUserViewModel model, string email)
         {
             if (model == null)
                 throw new Exception("Данные личного кабинета не указаны");
 
-            var user = await _userRepository.GetById(model.UserId);
+            var user = await _userRepository.GetByEmail(email);
 
             if (user == null)
-                throw new Exception("Пользователя с таким Id не существует");
-            if (model.Avatar == null)
-                throw new Exception("Пользователь без фото");
-
+                throw new Exception("Пользователя с таким id не существует");
             byte[] imageData = null;
-            using (var binaryReader = new BinaryReader(model.Avatar.OpenReadStream()))
+
+            if (model.Avatar != null)
             {
-                imageData = binaryReader.ReadBytes((int)model.Avatar.Length);
+                using (var binaryReader = new BinaryReader(model.Avatar.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)model.Avatar.Length);
+                }
             }
-            if (model.Email==null)
-            {
-                user.FirstName = model.FirstName;
-                user.PhoneNumber = model.PhoneNumber;
-                user.LastName = model.LastName;
-                user.PlateNumder = model.PlateNumder;
-                user.Avatar = imageData;
-            }
+
+            if (model.Email == null)
+                throw new Exception("Почта не указана");
+            if (user.Email != model.Email)
+                if (await _userRepository.UserAlreadyExists(model.Email))
+                    throw new Exception("Пользователь с такой почтой уже существует");
+
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.PhoneNumber = model.PhoneNumber;
             user.LastName = model.LastName;
             user.PlateNumder = model.PlateNumder;
             user.Avatar = imageData;
-            
+
             return _mapper.Map<UserModel>(await _userRepository.ChangeProfile(user));
         }
 
-        public async Task<UserModel> DeleteUser(int userId)
+        public async Task<UserModel> DeleteUser(string email)
         {
-            if (userId == null)
-                throw new Exception("ID пользователя не указан");
-            return _mapper.Map < UserModel > (await _userRepository.DeleteUser(userId));
+            return _mapper.Map<UserModel>(await _userRepository.DeleteUser(email));
         }
 
         public async Task<UserModel> ForgotPassword(ForgotPasswordViewModel email)
@@ -109,27 +108,19 @@ namespace WebParking.Service.Services.Implementations
             var result = await _userRepository.ForgotPassword(email);
 
             if (result == null)
-            {
                 throw new Exception("Пользователь с этой почтой не зарегистрирован");
-            }
 
             return _mapper.Map<UserModel>(result); ;
         }
 
-
-        public async Task<ProfileUserViewModel> GetUserById(int id)
+        public async Task<ResponseProfileUserViewModel> GetUserByEmail(string email)
         {
-            if (id == null)
-                throw new Exception("Id пользователя не указан");
+            var result = await _userRepository.GetByEmail(email);
 
-            var result = await _userRepository.GetById(id);
-            
             if (result == null)
-            {
                 throw new Exception("Пользователя не существует");
-            }
-            return _mapper.Map<ProfileUserViewModel>(result);
 
+            return _mapper.Map<ResponseProfileUserViewModel>(result);
         }
 
         public async Task Register(RegisterViewModel user)
@@ -140,8 +131,8 @@ namespace WebParking.Service.Services.Implementations
             user.Password = _passwordEncryption.HashPassword(user.Password);
             user.ConfirmPassword = _passwordEncryption.HashPassword(user.ConfirmPassword);
             var role = await _roleManager.FindByNameAsync("user");
-            await _userRepository.Register(user, role);
 
+            await _userRepository.Register(user, role);
         }
 
         public async Task<UserModel> ResetPassword(ResetPasswordViewModel pass)
@@ -152,6 +143,7 @@ namespace WebParking.Service.Services.Implementations
             pass.NewPassword = _passwordEncryption.HashPassword(pass.NewPassword);
             pass.NewConfirmPassword = _passwordEncryption.HashPassword(pass.NewConfirmPassword);
             var user = await _userRepository.ResetPassword(pass);
+
             return _mapper.Map<UserModel>(user);
         }
 

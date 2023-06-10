@@ -27,7 +27,8 @@ namespace WebParking.Service.Services.Implementations
             if (park == null)
                 throw new Exception("Парковка не указана");
 
-            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name, Column = park.Column, Row = park.Row};
+            ParkingEntityModel parking = new ParkingEntityModel() { Adress = park.Adress, Name = park.Name, Column = park.Column, Row = park.Row };
+
             byte[] imageData = null;
             using (var binaryReader = new BinaryReader(park.Image.OpenReadStream()))
             {
@@ -40,23 +41,16 @@ namespace WebParking.Service.Services.Implementations
 
         public async Task<ParkingModel> DeleteParking(int parkingId)
         {
-            if (parkingId == null)
-                throw new Exception("Id парковки не указано");
-
             return _mapper.Map<ParkingModel>(await _parkRepository.DeleteParking(parkingId));
         }
 
         public async Task<ParkingModel> GetParking(int parkId)
         {
-            if (parkId == null)
-                throw new Exception("Id парковки не указан");
-
             var result = await _parkRepository.GetParking(parkId);
 
             if (result == null)
-            {
                 throw new Exception("Парковки не существует");
-            }
+
             return _mapper.Map<ParkingModel>(result);
         }
 
@@ -69,22 +63,26 @@ namespace WebParking.Service.Services.Implementations
         public async Task<ParkingModel> UpdateParking(ParkingUpdateViewModel parking)
         {
             var res = await _parkRepository.GetParking(parking.ParkId);
+
             if (res == null)
                 throw new Exception("Парковки не существует");
+
+            if (parking.Image == null)
+                throw new Exception("Фото парковки не указано");
+
+            byte[] imageData = null;
             if (parking.Image != null)
             {
-                byte[] imageData = null;
                 using (var binaryReader = new BinaryReader(parking.Image.OpenReadStream()))
                 {
                     imageData = binaryReader.ReadBytes((int)parking.Image.Length);
                 }
-                res.Image = imageData;
-                res.Adress = parking.Adress;
-                res.Name = parking.Name;
-                return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
             }
 
-            res = _mapper.Map<ParkingEntityModel>(parking);
+            res.Image = imageData;
+            res.Adress = parking.Adress;
+            res.Name = parking.Name;
+
             return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
         }
     }

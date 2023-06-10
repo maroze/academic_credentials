@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebParking.Common.ViewModels.Booking;
 using WebParking.Data.Repositories;
 using WebParking.Service.Services;
@@ -9,58 +10,67 @@ namespace WebParking.Controllers
     [Route("api/booking")]
     [ApiController]
     [Authorize]
-    [AllowAnonymous]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
-
-        public BookingController(IBookingService bookingService)
+        private readonly IAccountService _accontService;
+        public BookingController(IBookingService bookingService, IAccountService accontService)
         {
             _bookingService = bookingService;
+            _accontService = accontService;
         }
 
-        [HttpGet]
-        [Route("lots/{user:int}/book")]
-        public async Task<IActionResult> GetUserBooksAsync([FromRoute] int user)
+        [HttpGet()]
+        public async Task<IActionResult> GetUserBooksAsync()
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                 return Ok( _bookingService.GetUserBooks(user));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            //Decode from base64 string
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            //convert json to key value pair
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+
+            var user = await _accontService.GetUserByEmail(values["email"]);
+
+            return Ok( _bookingService.GetUserBooks(user.UserId));
         }
 
-        [HttpPost]
-        [Route("book")]
-        public async Task<IActionResult> CreateBookAsync([FromBody] BookingViewModel book)
+        [HttpPost()]
+        public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookingViewModel model)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest("Invalid request data");
-                await _bookingService.AddBook(book);
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
 
-                return StatusCode(201);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            string jwt = Request.Headers.Authorization.ToString();
+            string[] jwtArray = jwt.Split('.');
+            //Decode from base64 string
+            string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
+            //convert json to key value pair
+            Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
+
+            var user = await _accontService.GetUserByEmail(values["email"]);
+
+            BookingViewModel book = new BookingViewModel() { EndBookedTime = model.EndBookedTime, StartBookedTime =model.StartBookedTime, IdLots = model.IdLots, IdUsers= user.UserId };
+
+            await _bookingService.AddBook(book);
+
+            return StatusCode(201);
         }
 
-        [HttpDelete]
-        [Route("book/{book:int}")]
-        public async Task<IActionResult> DeleteBookAsync([FromRoute] int book)
+        [HttpDelete("{id:int}/book")]
+        public async Task<IActionResult> DeleteBookAsync([FromRoute] int id)
         {
-            var delete = await _bookingService.DeleteBook(book);
+            if (!ModelState.IsValid)
+                return BadRequest("Неверные данные запроса");
+
+            var delete = await _bookingService.DeleteBook(id);
+
             if (delete == null)
-                return BadRequest("Book doesn't delete");
+                return BadRequest("Не удалось удалить бронь");
+
             return Ok();
         }
     }

@@ -23,7 +23,7 @@ namespace WebParking.Data.Repositories
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<UserEntityModel> DeleteUser(int userId);
+        Task<UserEntityModel> DeleteUser(string email);
 
         /// <summary>
         /// Изменение пароля пользователя
@@ -72,8 +72,8 @@ namespace WebParking.Data.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        Task<UserEntityModel> GetByEmail(string email);
+
         Task<UserEntityModel> GetById(int id);
-
-
     }
 }
