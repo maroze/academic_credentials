@@ -76,7 +76,7 @@ namespace WebParking.Controllers
             if (result == null)
                 return BadRequest("Не удалось создать парковочное место");
 
-            return StatusCode(201);
+            return Ok(result);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace WebParking.Controllers
             if (result == null)
                 return BadRequest("Не удалось создать парковку");
 
-            return StatusCode(201);
+            return Ok(result);
         }
 
         /// <summary>
