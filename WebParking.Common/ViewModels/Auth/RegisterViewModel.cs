@@ -5,9 +5,6 @@ using System.Text;
 
 namespace WebParking.Common.ViewModels.Auth
 {
-    /// <summary>
-    /// Модель представления регистрации пользователя
-    /// </summary>
     public class RegisterViewModel
     {
         [Required]
@@ -24,6 +21,5 @@ namespace WebParking.Common.ViewModels.Auth
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password not match.")]
         public string ConfirmPassword { get; set; }
-
     }
 }

@@ -40,9 +40,9 @@ namespace WebParking.Service.Services.Implementations
             if (res.IsBooked || res.IsBlocked)
                 throw new Exception("Парк место недоступно для бронирования");
 
-            res.IsBooked = true;
-            await _lotRepository.UpdateLot(res);
-            return _mapper.Map<BookModel>(await _bookRepository.AddBook(_mapper.Map<UserLotEntityModel>(lot)));
+            var book = _mapper.Map<UserLotEntityModel>(lot);
+
+            return _mapper.Map<BookModel>(await _bookRepository.AddBook(book));
         }
 
         public async Task<BookModel> DeleteBook(int lotId)
@@ -55,12 +55,13 @@ namespace WebParking.Service.Services.Implementations
             var lot = await _lotRepository.GetLot(get.IdLots);
             lot.IsBooked = false;
             await _lotRepository.UpdateLot(lot);
+
             return _mapper.Map<BookModel>(await _bookRepository.DeleteBook(lotId));
         }
 
         public IEnumerable<BookModel> GetBooks()
         {
-            var book_list = _bookRepository.GetBooks();
+            var book_list = _bookRepository.GetStartBooks();            
             return _mapper.Map<IEnumerable<BookModel>>(book_list);
         }
 
@@ -69,6 +70,5 @@ namespace WebParking.Service.Services.Implementations
             var book_list = _bookRepository.GetUserBooks(id);
             return _mapper.Map<IEnumerable<BookModel>>(book_list);
         }
-
     }
 }

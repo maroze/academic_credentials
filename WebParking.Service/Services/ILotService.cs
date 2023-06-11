@@ -25,7 +25,6 @@ namespace WebParking.Service.Services
         /// <returns></returns>
         public IEnumerable<LotModel> GetLots(int idpark);
 
-
         /// <summary>
         /// Обновление информации места парковки
         /// </summary>

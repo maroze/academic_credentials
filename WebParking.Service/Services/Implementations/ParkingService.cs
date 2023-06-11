@@ -17,11 +17,13 @@ namespace WebParking.Service.Services.Implementations
     {
         private readonly IParkingRepository _parkRepository;
         private readonly IMapper _mapper;
+
         public ParkingService(IParkingRepository parkRepository, IMapper mapper)
         {
             _parkRepository = parkRepository;
             _mapper = mapper;
         }
+
         public async Task<ParkingModel> AddParking(ParkingViewModel park)
         {
             if (park == null)

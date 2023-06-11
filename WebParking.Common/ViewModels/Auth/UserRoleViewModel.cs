@@ -9,6 +9,7 @@ namespace WebParking.Common.ViewModels.Auth
     public class UserRoleViewModel
     {
         public string Role { get; set; }
+
         public string Token { get; set; }
     }
 }

@@ -46,11 +46,9 @@ namespace WebParking.Service.Services.Implementations
                 Audience = "localhost",
                 Issuer= "localhost"
             };
-
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-
         }
     }
 }

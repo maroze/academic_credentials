@@ -12,14 +12,14 @@ namespace WebParking.Service.Services
     public interface IParkingService
     {
         /// <summary>
-        /// Информация о парковке с заданным id из БД
+        /// Информация о парковке с заданным id
          /// </summary>
         /// <param name="parkId"></param>
         /// <returns></returns>
         Task<ParkingModel> GetParking(int parkId);
 
         /// <summary>
-        /// Создание парковки в БД
+        /// Создание парковки
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
@@ -44,6 +44,5 @@ namespace WebParking.Service.Services
         /// <param name="parkingId"></param>
         /// <returns></returns>
         Task<ParkingModel> DeleteParking(int parkingId);
-
     }
 }

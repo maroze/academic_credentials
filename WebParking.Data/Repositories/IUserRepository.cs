@@ -21,7 +21,7 @@ namespace WebParking.Data.Repositories
         /// <summary>
         /// Удаление пользователя
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
         Task<UserEntityModel> DeleteUser(string email);
 
@@ -40,9 +40,9 @@ namespace WebParking.Data.Repositories
         Task<UserEntityModel> ChangeProfile(UserEntityModel model);
 
         /// <summary>
-        /// Проверка существует пользователь 
+        /// Проверка зарегистрирован пользователь 
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
         Task<bool> UserAlreadyExists(string email);
 
@@ -68,12 +68,17 @@ namespace WebParking.Data.Repositories
         Task<UserEntityModel> ResetPassword(ResetPasswordViewModel model);
 
         /// <summary>
+        /// Получение пользователя по email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        Task<UserEntityModel> GetByEmail(string email);
+
+        /// <summary>
         /// Получение пользователя по id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserEntityModel> GetByEmail(string email);
-
         Task<UserEntityModel> GetById(int id);
     }
 }

@@ -29,15 +29,25 @@ namespace WebParking.Data.Entities
         /// </summary>
         [Column("name")]
         public string? Name { get; set; }
+
+        /// <summary>
+        /// Сетка парковки строки
+        /// </summary>
         [Column("row")]
         public int? Row { get; set; }
+
+        /// <summary>
+        /// Сетка парковки столбцы
+        /// </summary>
         [Column("column")]
         public int? Column { get; set; }
+
         /// <summary>
         /// Адрес парковки
         /// </summary>
         [Column("adress")]
         public string? Adress { get; set; }
+
         public List<LotEntityModel> Lots { get; set; }
     }
 }

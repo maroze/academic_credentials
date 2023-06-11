@@ -12,6 +12,7 @@ namespace WebParking.Common.ViewModels.Auth
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string OldPassword { get; set;}

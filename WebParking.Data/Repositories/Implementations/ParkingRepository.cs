@@ -14,9 +14,7 @@ namespace WebParking.Data.Repositories.Implementations
     public class ParkingRepository : BaseRepository<ParkingEntityModel>, IParkingRepository
     {
         public ParkingRepository(ParkingContext _userContext) : base(_userContext)
-        {
-
-        }
+        {}
 
         public async Task<ParkingEntityModel> AddParking(ParkingEntityModel park)
         {

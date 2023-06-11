@@ -19,11 +19,9 @@ using WebParking.Data.Entities;
 namespace WebParking.Data.Repositories.Implementations
 {
     public class UserRepository : BaseRepository<UserEntityModel>, IUserRepository
-
     {
         public UserRepository(ParkingContext _userContext) : base(_userContext)
-        {
-        }
+        {}
 
         public async Task<UserEntityModel> Authenticate(LoginViewModel user)
         {

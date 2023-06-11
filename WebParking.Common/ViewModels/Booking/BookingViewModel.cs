@@ -10,16 +10,14 @@ namespace WebParking.Common.ViewModels.Booking
 {
     public class BookingViewModel
     {
-        //Время начала бронирования парк. места
+        [DataType(DataType.DateTime)]
         public DateTime? StartBookedTime { get; set; }
 
-        //Время конца бронирования парк. места
+        [DataType(DataType.DateTime)]
         public DateTime? EndBookedTime { get; set; }
 
-        //Внешний ключ парк. места
         public int IdLots { get; set; }
 
-        //Внешний ключ пользователя
         public int IdUsers { get; set; }
     }
 }

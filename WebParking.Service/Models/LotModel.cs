@@ -11,13 +11,29 @@ namespace WebParking.Service.Models
 {
     public class LotModel
     {
+        /// <summary>
+        /// id места парковки
+        /// </summary>
         public int LotId{get;set;}
+
+        /// <summary>
+        /// Внешний ключ парковки
+        /// </summary>
         public int IdParks { get; set; }
-        //Название парк. места
+
+        /// <summary>
+        /// Название парк. места
+        /// </summary>
         public string Name { get; set; }
-        //Состояние парк. места доступно/недоступно для бронирования
+
+        /// <summary>
+        /// Состояние парк. места доступно/недоступно для бронирования
+        /// </summary>
         public bool IsBlocked { get; set; }
-        //Состояние парк. места забронировано/свободно
+
+        /// <summary>
+        /// Состояние парк. места забронировано/свободно
+        /// </summary>
         public bool IsBooked { get; set; }
         
     }

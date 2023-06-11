@@ -12,10 +12,15 @@ namespace WebParking.Service.Services
     public interface IBookingService
     {
         /// <summary>
-        /// Информация о всех забронированных местах пользователя
+        /// Информация о всех бронях пользователя
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BookModel> GetUserBooks(int id);
+
+        /// <summary>
+        /// Информация о всех бронях
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<BookModel> GetBooks();
 
         /// <summary>

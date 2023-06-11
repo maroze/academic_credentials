@@ -16,7 +16,5 @@ namespace WebParking.Common.ViewModels.Auth
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-
     }
 }

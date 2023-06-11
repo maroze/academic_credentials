@@ -15,7 +15,17 @@ namespace WebParking.Data.Repositories
         /// <returns></returns>
         public IEnumerable<UserLotEntityModel> GetUserBooks(int id);
 
-        public IEnumerable<UserLotEntityModel> GetBooks();
+        /// <summary>
+        /// Выборка всех броней, который должны начаться через минуту от текущего времени 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserLotEntityModel> GetStartBooks();
+
+        /// <summary>
+        /// Выборка всех броней, который должны закончится  
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserLotEntityModel> GetEndBooks();
 
         /// <summary>
         /// Удаление брони
@@ -30,6 +40,13 @@ namespace WebParking.Data.Repositories
         /// <param name="lot"></param>
         /// <returns></returns>
         Task<UserLotEntityModel> AddBook(UserLotEntityModel lot);
+
+        /// <summary>
+        /// Обновление брони
+        /// </summary>
+        /// <param name="lot"></param>
+        /// <returns></returns>
+        Task<UserLotEntityModel> UpdateBook(UserLotEntityModel lot);
 
         /// <summary>
         /// Получение брони по id

@@ -59,7 +59,7 @@ namespace WebParking.Service.Services.Implementations
 
             return _mapper.Map<UserModel>(await _userRepository.ChangePassword(model));
         }
-        //Почему не работает
+      
         public async Task<UserModel> ChangeProfile(ProfileUserViewModel model, string email)
         {
             if (model == null)
@@ -81,6 +81,7 @@ namespace WebParking.Service.Services.Implementations
 
             if (model.Email == null)
                 throw new Exception("Почта не указана");
+
             if (user.Email != model.Email)
                 if (await _userRepository.UserAlreadyExists(model.Email))
                     throw new Exception("Пользователь с такой почтой уже существует");
@@ -110,7 +111,7 @@ namespace WebParking.Service.Services.Implementations
             if (result == null)
                 throw new Exception("Пользователь с этой почтой не зарегистрирован");
 
-            return _mapper.Map<UserModel>(result); ;
+            return _mapper.Map<UserModel>(result);
         }
 
         public async Task<ResponseProfileUserViewModel> GetUserByEmail(string email)

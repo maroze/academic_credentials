@@ -15,15 +15,17 @@ namespace WebParking.Data.Entities
         /// Id парковочного места
         /// </summary>
         [Key]
-      
         [Column("lot_id")]
         public int LotId { get; set; }
-/// <summary>
+
+        /// <summary>
         /// Внешний ключ парковки
         /// </summary>
         [Column("id_parkings")]
         public int IdParks { get; set; }
-        public ParkingEntityModel Parks { get; set; }  
+
+        public ParkingEntityModel Parks { get; set; }
+
         /// <summary>
         /// Название парк. места
         /// </summary>

@@ -12,7 +12,11 @@ namespace WebParking.Service.Services
 {
     public interface ITokenService
     {
-
+        /// <summary>
+        /// Генерация токена 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public Task<string> GenerateSecurityTokenAsync(UserEntityModel user);
     }
 }

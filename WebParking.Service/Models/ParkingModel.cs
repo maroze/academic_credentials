@@ -12,15 +12,34 @@ namespace WebParking.Service.Models
 {
     public class ParkingModel
     {
+        /// <summary>
+        /// id парковки
+        /// </summary>
         public int ParkId { get; set; }
-        public byte[] Image { get; set; }
 
-        //Название парковки
+        /// <summary>
+        /// Название парковки
+        /// </summary>
         public string? Name { get; set; }
 
-        //Адрес парковки
+        /// <summary>
+        /// Адрес парковки
+        /// </summary>
         public string? Adress { get; set; }
+
+        /// <summary>
+        /// Сетка парк. мест строки
+        /// </summary>
         public int? Row { get; set; }
+
+        /// <summary>
+        /// Сетка парк. мест столбцы
+        /// </summary>
         public int? Column { get; set; }
+
+        /// <summary>
+        /// Картинка парковки
+        /// </summary>
+        public byte[] Image { get; set; }
     }
 }

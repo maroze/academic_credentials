@@ -10,14 +10,11 @@ namespace WebParking.Common.ViewModels.Parking
     public class ParkingUpdateViewModel
     {
         public int ParkId { get; set; }
-        //Изображение парковки
 
-        public IFormFile? Image { get; set; }
-
-        //Название парковки
         public string? Name { get; set; }
 
-        //Адрес парковки
         public string? Adress { get; set; }
+
+        public IFormFile? Image { get; set; }
     }
 }

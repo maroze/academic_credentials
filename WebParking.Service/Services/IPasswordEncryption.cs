@@ -8,6 +8,11 @@ namespace WebParking.Common
 {
     public interface IPasswordEncryption
     {
+        /// <summary>
+        /// Шифрование пароля пользователя
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public string HashPassword(string password);
     }
 }

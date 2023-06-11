@@ -22,12 +22,14 @@ namespace WebParking.Data.Entities
         /// Время начала бронирования парк. места
         /// </summary>
         [Column("booked_start_at")]
+        [DataType(DataType.DateTime)]
         public DateTime? StartBookedTime { get; set; }
 
         /// <summary>
         /// Время конца бронирования парк. места
         /// </summary>
         [Column("booked_end_at")]
+        [DataType(DataType.DateTime)]
         public DateTime? EndBookedTime { get; set; }
 
         /// <summary>
@@ -40,13 +42,14 @@ namespace WebParking.Data.Entities
         /// <summary>
         /// Внешний ключ пользователя
         /// </summary>
-        [Column("is_users")]
+        [Column("id_users")]
         public int IdUsers { get; set; }
         public UserEntityModel Users { get; set; }
 
         /// <summary>
         /// Состояние брони истекла/неистекла
         /// </summary>
+        [Column("is_expired")]
         public bool IsExpired { get; set; }
     }
 }

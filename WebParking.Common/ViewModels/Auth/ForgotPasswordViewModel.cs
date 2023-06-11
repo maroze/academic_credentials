@@ -12,6 +12,5 @@ namespace WebParking.Common.ViewModels.Auth
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
     }
 }

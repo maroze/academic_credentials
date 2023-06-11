@@ -8,23 +8,16 @@ using System.Threading.Tasks;
 
 namespace WebParking.Common.ViewModels.Parking
 {
-    /// <summary>
-    /// Модель представления создания парковки
-    /// </summary>
     public class ParkingViewModel
     {
-        //Изображение парковки
-        
-        public IFormFile? Image { get; set; }
-
-        //Название парковки
         public string? Name { get; set; }
 
-        //Адрес парковки
         public string? Adress { get; set; }
 
         public int? Row { get; set; }
+
         public int? Column { get; set; }
 
+        public IFormFile? Image { get; set; }
     }
 }

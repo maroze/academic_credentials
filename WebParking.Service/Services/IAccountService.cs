@@ -49,16 +49,16 @@ namespace WebParking.Service.Services
         Task<UserModel> ResetPassword(ResetPasswordViewModel pass);
 
         /// <summary>
-        /// Получение пользователя по id
+        /// Получение пользователя по email
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
         Task<ResponseProfileUserViewModel> GetUserByEmail(string email);
 
         /// <summary>
         /// Удаление пользователя
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="email"></param>
         /// <returns></returns>
         Task<UserModel> DeleteUser(string email);
 
@@ -75,7 +75,6 @@ namespace WebParking.Service.Services
         /// <param name="model"></param>
         /// <returns></returns>
         Task<UserModel> ChangeProfile(ProfileUserViewModel model, string email);
-
     }
 }
 

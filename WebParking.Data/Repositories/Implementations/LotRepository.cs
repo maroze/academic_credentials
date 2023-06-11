@@ -13,9 +13,7 @@ namespace WebParking.Data.Repositories.Implementations
     public class LotRepository : BaseRepository<LotEntityModel>, ILotRepository
     {
         public LotRepository(ParkingContext _userContext) : base(_userContext)
-        {
-
-        }
+        {}
 
         public async Task<LotEntityModel> AddLot(LotEntityModel lot)
         {
@@ -41,7 +39,6 @@ namespace WebParking.Data.Repositories.Implementations
 
         public async Task<LotEntityModel> UpdateLot(LotEntityModel lot)
         {
-            
             return await UpdateAsync(lot);
         }
     }

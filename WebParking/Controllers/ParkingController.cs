@@ -30,7 +30,7 @@ namespace WebParking.Controllers
         }
 
         /// <summary>
-        /// Получение всех id парк. мест и их состояние(заблокированны)
+        /// Получение всех парк. мест и их состояние(заблокированны) по id парковки
         /// </summary>
         /// <param name="park"></param>
         /// <returns></returns>
@@ -43,6 +43,11 @@ namespace WebParking.Controllers
             return Ok(_lotService.GetLots(id));
         }
 
+        /// <summary>
+        /// Получение парковочного места по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("lots/{id:int}")]
         public async Task<IActionResult> GetLotAsync([FromRoute] int id)
         {
@@ -53,10 +58,11 @@ namespace WebParking.Controllers
 
             return Ok(result);
         }
+
         /// <summary>
         /// Создание парк места
         /// </summary>
-        /// <param name="park">парковка</param>
+        /// <param name="lot">парковка</param>
         /// <returns></returns>
         [Authorize(Roles = "admin")]
         [HttpPost("lots")]
@@ -73,6 +79,11 @@ namespace WebParking.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// Изменениеместа парковки
+        /// </summary>
+        /// <param name="lot"></param>
+        /// <returns></returns>
         [HttpPut("lots")]
         [Authorize(Roles = "admin, manager")]
         public async Task<IActionResult> UpdateLotAsync([FromBody] LotUpdateViewModel lot)
@@ -88,6 +99,11 @@ namespace WebParking.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Удаление парк. места
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("lots/{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteLotAsync([FromRoute] int id)
@@ -99,8 +115,9 @@ namespace WebParking.Controllers
 
             return Ok();
         }
+
         /// <summary>
-        /// Создание картинки, адреса и названия парковки
+        /// Создание парковки
         /// </summary>
         /// <param name="park">парковка</param>
         /// <returns></returns>
@@ -120,7 +137,7 @@ namespace WebParking.Controllers
         }
 
         /// <summary>
-        /// Информация о названии и адресе парковки и картинка парковки
+        /// Информация о парковке
         /// </summary>
         /// <param name="id">парковка</param>
         /// <returns></returns>
@@ -136,6 +153,10 @@ namespace WebParking.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Получение всех парковок
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("parks/all")]
         public async Task<IActionResult> GetParkingsAsync()
         {
@@ -145,6 +166,11 @@ namespace WebParking.Controllers
             return Ok(_parkService.GetParkins());
         }
 
+        /// <summary>
+        /// Изменение парковки
+        /// </summary>
+        /// <param name="park"></param>
+        /// <returns></returns>
         [HttpPut("parks")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateParkingAsync([FromForm] ParkingUpdateViewModel park)
@@ -160,6 +186,11 @@ namespace WebParking.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Удаление парковки
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("parks/{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteParkingAsync([FromRoute] int id)

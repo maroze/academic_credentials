@@ -24,7 +24,7 @@ namespace WebParking.Data.Entities
         /// <summary>
         /// Email(логин) пользователя
         /// </summary>
-        [Column("username")]
+        [Column("user_name")]
         public string Email { get; set; }
 
         /// <summary>
@@ -41,26 +41,32 @@ namespace WebParking.Data.Entities
         /// <summary>
         /// Фото пользователя
         /// </summary>
+        [Column("avatar")]
         public byte[]? Avatar { get; set; }
 
         /// <summary>
         /// Имя пользователя
         /// </summary>
+        [Column("first_name")]
         public string? FirstName { get; set; }
 
         /// <summary>
         /// Фамилия пользователя
         /// </summary>
+        [Column("last_name")]
         public string? LastName { get; set; }
 
         /// <summary>
         /// Номер пользователя
         /// </summary>
+        [Phone]
+        [Column("phone")]
         public string? PhoneNumber { get; set; }
 
         /// <summary>
         /// Номер машины
         /// </summary>
+        [Column("state_num")]
         public string? PlateNumder { get; set; }
         public List<UserLotEntityModel> UserLots { get; set; }
     }

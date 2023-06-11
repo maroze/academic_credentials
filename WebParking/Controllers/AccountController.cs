@@ -38,7 +38,6 @@ namespace WebParking.Controllers
         /// <summary>
         /// Информация о пользователе 
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet()]
         public async Task<IActionResult> GetUserAsync()
@@ -48,9 +47,7 @@ namespace WebParking.Controllers
 
             string jwt = Request.Headers.Authorization.ToString();
             string[] jwtArray = jwt.Split('.');
-            //Decode from base64 string
             string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
-            //convert json to key value pair
             Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
 
             var loguser = await _accountService.GetUserByEmail(values["email"]);
@@ -59,9 +56,9 @@ namespace WebParking.Controllers
         }
        
         /// <summary>
-        /// Информация о пользователе 
+        /// Изменение личного кабинета
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut("profiles")]
         public async Task<IActionResult> ProfileUserAsync([FromForm] ProfileUserViewModel model)
@@ -106,7 +103,7 @@ namespace WebParking.Controllers
         }
 
         /// <summary>
-        /// Восстановление пароля
+        /// Пользователь забыл пароль
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -130,7 +127,7 @@ namespace WebParking.Controllers
         /// <summary>
         /// Регистрация пользователя
         /// </summary>
-        /// <param name="model">логин, пароль, повторить пароль</param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("register")]
@@ -149,7 +146,6 @@ namespace WebParking.Controllers
         /// <summary>
         /// Выход пользователя из аккаунта
         /// </summary>
-        /// <param name="user"></param>
         /// <returns></returns>
         [HttpHead("logout")]
         public async Task<IActionResult> Logout()
@@ -159,6 +155,11 @@ namespace WebParking.Controllers
             return Redirect("/");
         }
 
+        /// <summary>
+        /// Восстановление пароля пользователя
+        /// </summary>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] RequestResetPasswordViewModel pass)
         {
@@ -180,6 +181,11 @@ namespace WebParking.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Изменение пароля
+        /// </summary>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         [HttpPatch("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] RequestChangePasswordViewModel pass)
         {
@@ -188,9 +194,7 @@ namespace WebParking.Controllers
 
             string jwt = Request.Headers.Authorization.ToString();
             string[] jwtArray = jwt.Split('.');
-            //Decode from base64 string
             string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
-            //convert json to key value pair
             Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
 
             ChangePasswordViewModel model = new ChangePasswordViewModel() { Email = values["email"], OldPassword = pass.OldPassword, NewPassword = pass.NewPassword, ConfirmPassword = pass.ConfirmPassword };
@@ -202,6 +206,10 @@ namespace WebParking.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <returns></returns>
         [HttpDelete("users")]
         public async Task<IActionResult> DeleteUser()
         {
@@ -210,9 +218,7 @@ namespace WebParking.Controllers
 
             string jwt = Request.Headers.Authorization.ToString();
             string[] jwtArray = jwt.Split('.');
-            //Decode from base64 string
             string jsonString = System.Text.Encoding.Default.GetString(Convert.FromBase64String(jwtArray[1].PadRight(jwtArray[1].Length + (jwtArray[1].Length * 3) % 4, '=')));
-            //convert json to key value pair
             Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
 
             var user = await _accountService.DeleteUser(values["email"]);

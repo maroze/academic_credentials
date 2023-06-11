@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,13 +9,12 @@ namespace WebParking.Common.ViewModels.Booking
 {
     public class CreateBookingViewModel
     {
-        //Время начала бронирования парк. места
+        [DataType(DataType.DateTime)]
         public DateTime? StartBookedTime { get; set; }
 
-        //Время конца бронирования парк. места
+        [DataType(DataType.DateTime)]
         public DateTime? EndBookedTime { get; set; }
 
-        //Внешний ключ парк. места
         public int IdLots { get; set; }
     }
 }
