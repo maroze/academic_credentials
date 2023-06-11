@@ -59,6 +59,9 @@ namespace WebParking.Controllers
 
             var user = await _accontService.GetUserByEmail(values["email"]);
 
+            if (model.StartBookedTime >= model.EndBookedTime)
+                return BadRequest("Дата начала не может быть позже даты окончания");
+
             BookingViewModel book = new BookingViewModel() { EndBookedTime = model.EndBookedTime, StartBookedTime = model.StartBookedTime, IdLots = model.IdLots, IdUsers = user.UserId };
 
             var booking = await _bookingService.AddBook(book);
