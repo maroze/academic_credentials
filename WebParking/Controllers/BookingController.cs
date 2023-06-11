@@ -38,7 +38,7 @@ namespace WebParking.Controllers
 
             var user = await _accontService.GetUserByEmail(values["email"]);
 
-            return Ok( _bookingService.GetUserBooks(user.UserId));
+            return Ok(_bookingService.GetUserBooks(user.UserId));
         }
 
         /// <summary>
@@ -59,11 +59,14 @@ namespace WebParking.Controllers
 
             var user = await _accontService.GetUserByEmail(values["email"]);
 
-            BookingViewModel book = new BookingViewModel() { EndBookedTime = model.EndBookedTime, StartBookedTime =model.StartBookedTime, IdLots = model.IdLots, IdUsers= user.UserId };
+            BookingViewModel book = new BookingViewModel() { EndBookedTime = model.EndBookedTime, StartBookedTime = model.StartBookedTime, IdLots = model.IdLots, IdUsers = user.UserId };
 
-            await _bookingService.AddBook(book);
+            var booking = await _bookingService.AddBook(book);
 
-            return StatusCode(201);
+             if (booking == null)
+                return BadRequest("Парковочное место уже занято на это время");
+
+            return Ok(booking);
         }
 
         /// <summary>
@@ -83,6 +86,6 @@ namespace WebParking.Controllers
                 return BadRequest("Не удалось удалить бронь");
 
             return Ok();
-        }       
+        }
     }
 }
