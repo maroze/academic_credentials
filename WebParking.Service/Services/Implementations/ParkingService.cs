@@ -84,6 +84,8 @@ namespace WebParking.Service.Services.Implementations
             res.Image = imageData;
             res.Adress = parking.Adress;
             res.Name = parking.Name;
+            res.Column = parking.Column;
+            res.Row = parking.Row;
 
             return _mapper.Map<ParkingModel>(await _parkRepository.UpdateParking(res));
         }

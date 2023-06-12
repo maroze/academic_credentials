@@ -15,6 +15,10 @@ namespace WebParking.Common.ViewModels.Parking
 
         public string? Adress { get; set; }
 
+        public int? Row { get; set; }
+
+        public int? Column { get; set; }
+
         public IFormFile? Image { get; set; }
     }
 }
