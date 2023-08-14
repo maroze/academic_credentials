@@ -15,7 +15,9 @@
 * Разработать серверную часть веб-платформы;
 #
 ### ER-Диаграмма
+
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/90f8ccc8-ea8d-42d1-896b-2bb21dbc4d70)
 #
 ### Входные данные
@@ -32,12 +34,33 @@
 #
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/ceac3ce5-6dcc-4838-b3c7-c40cdc417af0)
 ## Конечные точки REST API
-![image](https://github.com/maroze/academic_credentials/assets/91451262/02781174-ef93-4d39-a4b2-91b9e5623974)
+
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+
+| URL | Метод | Описание |
+| --- | ---  --- |
+| api/accounts | Ресурс пользователей |
+| --- | --- | --- |
+| accounts	| get	| Возвращает информацию о конкретном пользователе | 
+| /profiles	| put	| изменяет личные данные пользователя |  
+| /login	| post	| авторизует зарегистрированного пользователя | 
+| /forgot-password	| post	| отправляет токен для восстановления пароля | 
+| /register	| post	| регистрирует нового пользователя | 
+| /logout	| head	| выход пользователя из аккаунта | 
+| /reset-password	| patch	| создает новый пароль пользователя | 
+| /change-password	| patch	| изменяет пароль пользователя | 
+| /users	| delete	| удаляет пользователя | 
+
+
+![image](https://github.com/maroze/academic_credentials/assets/91451262/02781174-ef93-4d39-a4b2-91b9e5623974)
+
+![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/1f0cd9a8-79dd-4d2e-bf02-404ed81b7947)
-![image](https://github.com/maroze/academic_credentials/assets/91451262/0402dc6f-504f-4b10-92c5-64eae8bf6184)
+
+![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/f18b50d7-21e9-48ae-8011-86ced3bc15bb)
-![image](https://github.com/maroze/academic_credentials/assets/91451262/1337c811-452c-48ed-b812-a3c0961367b4)
 
 
 
