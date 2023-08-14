@@ -80,8 +80,16 @@
 | booking/{id}	| delete	| удаляет бронь с конкретным ID| 
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/9d377c45-c18d-493d-93b7-3f2df89d7e95)
-
-
-
-
+#
+![](https://64.media.tumblr.com/f7a6b2a5e435b350c9cb47ede81937d0/tumblr_ou4zpbuXlS1r3ykuvo2_500.gif)
+### Установка
+![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+1. Загрузить репозиторий
+2. Настроить путь к базе данных в файлах appsettings.json
+3. Ввести команду 'dotnet ef database update'
+4. Открыть файл «WebParking.exe»
+#
+## Авторы
+![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+* **Григорьева Алла**
 
