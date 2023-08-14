@@ -86,7 +86,7 @@
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
 1. Загрузить репозиторий
 2. Настроить путь к базе данных в файлах appsettings.json
-3. Ввести команду 'dotnet ef database update'
+3. Ввести команду `dotnet ef database update`
 4. Открыть файл «WebParking.exe»
 #
 ## Авторы
