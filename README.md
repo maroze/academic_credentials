@@ -3,30 +3,29 @@
 # Разработка веб-сервиса для бронирования парковочных мест. Реализация серверной части
 Проект создается на платформе ASP.NET, на языке программирования C#, с использованием реляционной системы управления базами данных «PostgreSQL». 
 
-![](https://64.media.tumblr.com/f7a6b2a5e435b350c9cb47ede81937d0/tumblr_ou4zpbuXlS1r3ykuvo2_500.gif)
 ## Цель работы
-#![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
 Целью работы является проектирование и разработка серверной части программного продукта для бронирования парковочных мест, позволяющего пользователю спланировать поездку, сократить время на поиск парковочного места и зарезервировать его в удобное для себя время.
 
 ### Поставленные задачи
-#![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
 * Исследовать предметную область и сравнить с другими похожими продуктами;
 * Сформировать архитектуру серверной части приложения;
 * Спроектировать базу данных;
 * Разработать серверную часть веб-платформы;
   
 ### ER-Диаграмма
-#![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
-![image](https://github.com/maroze/academic_credentials/assets/91451262/87b3a1a4-80d2-418b-8150-a1adee08f3bd)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+![image](file:///C:/Users/Пользователь/Documents/Диплом.drawio.svg)
 
 ### Входные данные
-#![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
 * Логин, пароль при регистрации и авторизации, также данные профиля;
 * Данные о парковке и парковочных местах;
 * Данные для бронирования.
 
 ### Выходные данные
-#![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/2f4b5bcf-f0d2-447b-8473-9b7dfa5e82a7)
 * Информация о парковках и парковочные места, их адреса и состояния;
 * Профиль пользователя и его брони;
 * Информация о сервисе и контакты.
