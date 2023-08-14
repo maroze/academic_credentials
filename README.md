@@ -50,8 +50,7 @@
 | /change-password	| patch	| изменяет пароль пользователя | 
 | /users	| delete	| удаляет пользователя | 
 
-
-![image](https://github.com/maroze/academic_credentials/assets/91451262/02781174-ef93-4d39-a4b2-91b9e5623974)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/f18b50d7-21e9-48ae-8011-86ced3bc15bb)
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
 
@@ -69,7 +68,7 @@
 | /parks/{id}	| delete	| удаляет парковку с конкретным ID | 
 | /parks/all	| get	| возвращает список всех парковок | 
  
-![image](https://github.com/maroze/academic_credentials/assets/91451262/1f0cd9a8-79dd-4d2e-bf02-404ed81b7947)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/02781174-ef93-4d39-a4b2-91b9e5623974)
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
 
@@ -80,7 +79,7 @@
 | booking	| post |	создает новую бронь| 
 | booking/{id}	| delete	| удаляет бронь с конкретным ID| 
 
-![image](https://github.com/maroze/academic_credentials/assets/91451262/f18b50d7-21e9-48ae-8011-86ced3bc15bb)
+![image](https://github.com/maroze/academic_credentials/assets/91451262/1f0cd9a8-79dd-4d2e-bf02-404ed81b7947)
 
 
 
