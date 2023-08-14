@@ -55,9 +55,30 @@
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
 
+| URL | Метод | Описание |
+| --- | --- | --- |
+| api/parkings | Ресурс парковок и мест |   |
+| /lots/{id}/park	| get	| возвращает список всех парковочных мест парковки | 
+| /lots/{id}	| get	| возвращает парковочное место с данным ID | 
+| /lots	| post	| создает новое парковочное место | 
+| /lots	| put	| изменяет данные парковочного места | 
+| /lots/{id}	| delete	| удаляет парковочное место с конкретным ID | 
+| /parks	| post	| создает новую парковку | 
+| /parks/{id}	| get	| возвращает парковку с конкретным ID | 
+| /parks	| put	| изменяет данные парковки с конкретным ID | 
+| /parks/{id}	| delete	| удаляет парковку с конкретным ID | 
+| /parks/all	| get	| возвращает список всех парковок | 
+ 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/1f0cd9a8-79dd-4d2e-bf02-404ed81b7947)
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
+
+| URL | Метод | Описание |
+| --- | --- | --- |
+| api/booking | Ресурс броней |   |
+| booking	| get | возвращает список всех броней пользователя|  
+| booking	| post |	создает новую бронь| 
+| booking/{id}	| delete	| удаляет бронь с конкретным ID| 
 
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/f18b50d7-21e9-48ae-8011-86ced3bc15bb)
 
