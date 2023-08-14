@@ -38,7 +38,7 @@
 ![image](https://github.com/maroze/academic_credentials/assets/91451262/e784cf01-e505-417d-b30d-8ebe8413e70a)
 
 | URL | Метод | Описание |
-| --- | ---  --- |
+| --- | --- |
 | api/accounts | Ресурс пользователей |
 | --- | --- | --- |
 | accounts	| get	| Возвращает информацию о конкретном пользователе | 
